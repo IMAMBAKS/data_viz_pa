@@ -2,13 +2,13 @@
   <library name="Generated files" type="javaScript">
     <properties>
       <sourceFilesUrls>
-        <item url="file://$PROJECT_DIR$/app/course-2/course-2.component.js" />
-        <item url="file://$PROJECT_DIR$/app/course-2/course-2.component.js" />
+        <item url="file://$PROJECT_DIR$/app/app.routes.js" />
+        <item url="file://$PROJECT_DIR$/app/pandas/course-2.component.js" />
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/app/course-2/course-2.component.js" />
-      <root url="file://$PROJECT_DIR$/app/course-2/course-2.component.js" />
+      <root url="file://$PROJECT_DIR$/app/app.routes.js" />
+      <root url="file://$PROJECT_DIR$/app/pandas/pandas.component.js" />
     </CLASSES>
     <SOURCES />
   </library>

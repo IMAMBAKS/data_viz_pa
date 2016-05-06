@@ -5,14 +5,14 @@ import {PostService} from './post.service';
 
 
 @Component({
-    selector: 'course-2',
-    templateUrl: 'app/course-2/course-2.component.html',
+    selector: 'pandas',
+    templateUrl: 'app/pandas/pandas.component.html',
     directives: [BarChartDirective],
     providers: [PostService]
 })
 
 
-export class CourseTwoComponent {
+export class PandasComponent {
 
     active;
     bmai: number[];
