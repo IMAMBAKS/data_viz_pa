@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
+import {Directive, ElementRef, Input, OnChanges} from "@angular/core";
 
 @Directive({
     selector: 'myBarChart'
@@ -46,7 +46,9 @@ export class BarChartDirective implements OnChanges {
 
         let yAxis = d3.svg.axis()
             .scale(y)
-            .orient('left');
+            .orient('left')
+            .tickFormat(d3.time.format('%Y-%m-%d'));
+
 
         let axisData = [
             {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x'},
