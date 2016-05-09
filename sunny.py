@@ -22,14 +22,14 @@ def get_year(parameter,*args,freq: str='W') -> pd.DataFrame:
     return name
 
 
-names = (get_year('2015-2','2015-7').to_json(date_format='epoch'))
+names = (get_year('2015-2','2015-7', freq='W').to_json(date_format='epoch'))
 
 class QuoteResource:
     def on_get(self, req, resp):
         """Handles GET requests"""
         quote = {
             'quote': 'I\'ve always been more interested in the future than in the past.',
-            'author': (np.random.randint(0,100,30)).tolist()
+            'author': names
         }
 
         print(quote)

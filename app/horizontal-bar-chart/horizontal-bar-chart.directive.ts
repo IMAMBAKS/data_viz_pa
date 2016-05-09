@@ -18,7 +18,7 @@ export class BarChartDirective implements OnChanges {
 
         console.log(barChartData);
 
-        let testData = ['1,2,3,4,5,6'];
+        let testData = barChartData;
 
         // create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 30},
@@ -78,7 +78,7 @@ export class BarChartDirective implements OnChanges {
                 .delay((d, i) => i * 50)
                 .duration(800)
                 .attr('y', (d) => y(d))
-                .attr('height', (d) => y(0) - y(d));
+                .attr('height', (d) => y(0) - y(d.value));
 
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {

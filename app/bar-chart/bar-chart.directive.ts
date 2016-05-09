@@ -16,8 +16,6 @@ export class BarChartDirective implements OnChanges {
 
         d3.select('svg').remove();
 
-        console.log(barChartData);
-
         let testData = barChartData;
 
         // create window for your chart;
@@ -42,12 +40,13 @@ export class BarChartDirective implements OnChanges {
         // axes
         let xAxis = d3.svg.axis()
             .scale(x)
-            .orient('bottom');
+            .orient('bottom')
+            .tickFormat(d3.time.format('%Y-%m-%d'));
 
         let yAxis = d3.svg.axis()
             .scale(y)
-            .orient('left')
-            .tickFormat(d3.time.format('%Y-%m-%d'));
+            .orient('left');
+
 
 
         let axisData = [
@@ -60,8 +59,8 @@ export class BarChartDirective implements OnChanges {
             // fill in here
 
 
-            x.domain(data.map((d, i) => i));
-            y.domain([0, d3.max(data, (d) => + d)]);
+            x.domain(data.map((d, i) => d.date));
+            y.domain([0, 300]);
 
 
             let bars = svg.selectAll('rect.bar')
@@ -72,21 +71,21 @@ export class BarChartDirective implements OnChanges {
                 .classed('bar', true);
 
             bars
-                .attr('x', (d, i) => x(i))
+                .attr('x', (d, i) => x(d.date))
                 .attr('width', x.rangeBand())
                 .attr('y', y(0))
                 .attr('height', 0)
                 .transition()
                 .delay((d, i) => i * 50)
                 .duration(800)
-                .attr('y', (d) => y(d))
-                .attr('height', (d) => y(0) - y(d));
+                .attr('y', (d) => y(d._value))
+                .attr('height', (d) => y(0) - y(d._value));
 
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {
 
 
-                if (d < 30) {
+                if (d.value < 30) {
                     return 'gray';
                 }
             });
