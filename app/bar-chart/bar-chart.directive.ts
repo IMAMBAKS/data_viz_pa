@@ -48,7 +48,6 @@ export class BarChartDirective implements OnChanges {
             .orient('left');
 
 
-
         let axisData = [
             {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x'},
             {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
