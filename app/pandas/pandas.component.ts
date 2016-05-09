@@ -1,6 +1,6 @@
-import {Component} from "@angular/core";
-import {BarChartDirective} from "../bar-chart/bar-chart.directive";
-import {PostService} from "./post.service";
+import {Component} from '@angular/core';
+import {BarChartDirective} from '../bar-chart/bar-chart.directive';
+import {PostService} from './post.service';
 
 
 @Component({
