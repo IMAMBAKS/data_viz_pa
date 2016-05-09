@@ -1,10 +1,10 @@
 # sample.py
-import falcon
 import json
-from waitress import serve
-from falcon_cors import CORS
-import numpy as np
+
+import falcon
 import pandas as pd
+from falcon_cors import CORS
+from waitress import serve
 
 cors = CORS(allow_origins_list=['http://localhost:3000/', 'http://localhost:*', 'http://localhost:3000'])
 
@@ -36,8 +36,24 @@ class QuoteResource:
 
         resp.body = json.dumps(quote)
 
+class QuoteResourceSpecific:
+    def on_get(self, req, resp, date1,date2):
+        """Handles GET requests"""
+        print(date2)
+
+        names2 = (get_year(date1, date2, freq='W').to_json(date_format='epoch'))
+        quote = {
+            'quote': 'I\'ve always been more interested in the future than in the past.',
+            'author': names2
+        }
+
+        print(quote)
+
+        resp.body = json.dumps(quote)
+
 
 api = falcon.API(middleware=[cors.middleware])
 api.add_route('/quote', QuoteResource())
+api.add_route('/quote/{date1}/{date2}', QuoteResourceSpecific())
 
 serve(api, host='127.0.0.1', port=80)
