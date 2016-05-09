@@ -1,7 +1,6 @@
-import {Component} from '@angular/core';
-
-import {BarChartDirective} from '../bar-chart/bar-chart.directive';
-import {PostService} from './post.service';
+import {Component} from "@angular/core";
+import {BarChartDirective} from "../bar-chart/bar-chart.directive";
+import {PostService} from "./post.service";
 
 
 @Component({
@@ -56,18 +55,23 @@ export class PandasComponent {
         this._postService.getPost().subscribe(data => {
 
             // let data_transform_array: any = {'date': [], 'value': [], 'names': []};
+            data.author = JSON.parse(data.author);
+
+
             let data_transform_array: any = [];
 
             for (let key in data.author) {
 
                 if (data.author.hasOwnProperty(key)) {
+
                     data_transform_array.push({
                         _value: data.author[key].length,
                         date: new Date(+key),
-                        names: [].push(data.author[key])
+                        names: (data.author[key])
                     });
                 }
             }
+
 
             this.bmai = data_transform_array;
 

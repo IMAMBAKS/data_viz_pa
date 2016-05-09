@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
+import {Directive, ElementRef, Input, OnChanges} from "@angular/core";
 
 @Directive({
     selector: 'myBarChart'
@@ -59,7 +59,7 @@ export class BarChartDirective implements OnChanges {
 
 
             x.domain(data.map((d, i) => d.date));
-            y.domain([0, 300]);
+            y.domain([0, 200]);
 
 
             let bars = svg.selectAll('rect.bar')

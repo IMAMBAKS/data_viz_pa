@@ -1,12 +1,16 @@
 <form action="" class="form-horizontal" _lpchecked="1">
 
     <fieldset>
-        <legend>Request form</legend>
+        <legend>Query</legend>
 
         <div class="form-group">
-            <label for="inputPandas" class="col-lg-2 control-label">Query</label>
+            <label for="inputPandas" class="col-lg-2 control-label">First date</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputPandas" placeholder="Query">
+                <input type="text" class="form-control" id="inputPandas" placeholder="Please insert the first date">
+            </div>
+            <label for="inputPandas2" class="col-lg-2 control-label">Second date</label>
+            <div class="col-lg-10">
+                <input type="text" class="form-control" id="inputPandas2" placeholder="Please insert the second date">
             </div>
         </div>
 
@@ -27,7 +31,7 @@
 <div class="panel panel-default">
     <div class="panel-heading">
 
-        <h4>Graph 1</h4>
+        <h4>Users vs Time</h4>
 
 
     </div>
@@ -41,21 +45,6 @@
 
     </div>
 
-    <div class="panel-heading">
-
-        <h4>Graph 2</h4>
-
-
-    </div>
-
-    <div class="panel-body">
-
-
-        <myBarChart [barChartData]='bmai'>
-        </myBarChart>
-
-
-    </div>
 
 
 </div>
