@@ -70,7 +70,7 @@ export class BarChartDirective implements OnChanges {
                 .classed('bar', true);
 
             bars
-                .attr('x', (d, i) => x(i))
+                .attr('x', (d, i) => x(d))
                 .attr('width', x.rangeBand())
                 .attr('y', y(0))
                 .attr('height', 0)
