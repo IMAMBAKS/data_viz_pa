@@ -5,7 +5,7 @@
 
         <div class="form-group">
             <label for="inputPandas" class="col-lg-2 control-label">First date</label>
-            <div class="col-lg-10">
+            <div class="col-lg-4">
                 <input type="text"
                        class="form-control"
                        id="inputPandas"
@@ -27,7 +27,7 @@
                 </div>
             </div>
             <label for="inputPandas2" class="col-lg-2 control-label">Second date</label>
-            <div class="col-lg-10">
+            <div class="col-lg-4">
                 <input type="text"
                        class="form-control"
                        id="inputPandas2"
@@ -37,20 +37,39 @@
 
                 >
 
-                <div
-                        *ngIf="!second_date.valid"
-                        class="alert alert-danger">second date is required
-                </div>
-
             </div>
 
+
+        </div>
+
+        <div class="form-group">
+            <label class="col-lg-2 control-label">Frequency</label>
+            <div class="col-lg-10">
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionDay" value="D" [(ngModel)]="model.choice"
+                               #frequency="ngForm" >
+                        Day(s)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionWeek" value="W" checked="" [(ngModel)]="model.choice">
+                        Week(s)
+                    </label>
+                </div>
+                <div class="radio">
+                    <label>
+                        <input type="radio" name="optionsRadios" id="optionMonth" value="M" [(ngModel)]="model.choice">
+                        Month(s)
+                    </label>
+                </div>
+            </div>
         </div>
 
         <button class="btn btn-primary" type="submit" [disabled]="!f.valid">New Data</button>
 
     </fieldset>
-
-
 
 
 </form>

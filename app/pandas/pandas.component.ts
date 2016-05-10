@@ -1,8 +1,8 @@
-import {Component} from '@angular/core';
-import {BarChartDirective} from '../bar-chart/bar-chart.directive';
-import {PostService} from './post.service';
-import {ControlGroup, FormBuilder, Validators} from '@angular/common';
-import {DateValidators} from './dateValidators';
+import {Component} from "@angular/core";
+import {BarChartDirective} from "../bar-chart/bar-chart.directive";
+import {PostService} from "./post.service";
+import {ControlGroup, FormBuilder, Validators} from "@angular/common";
+import {DateValidators} from "./dateValidators";
 
 @Component({
     selector: 'pandas',
@@ -19,13 +19,9 @@ export class PandasComponent {
     bmai: any;
     koo: string;
 
+    choice;
+
     form: ControlGroup;
-
-
-    // form = new ControlGroup( {
-    //     first_date: new Control( '', Validators.required ),
-    //     second_date: new Control( '', Validators.required )
-    // } );
 
     constructor(private _postService: PostService, fb: FormBuilder) {
 
@@ -34,7 +30,7 @@ export class PandasComponent {
                 Validators.required,
                 DateValidators.cannotContainSpace,
                 DateValidators.mustBeAValidDate])],
-            second_date: ['', Validators.required],
+            second_date: ['']
         });
 
 
@@ -44,9 +40,9 @@ export class PandasComponent {
 
         let date1 = this.form.value.first_date;
         let date2 = this.form.value.second_date;
+        let frequency = this.choice;
 
-
-        this._postService.getPost(date1, date2).subscribe(data => {
+        this._postService.getPost(date1, date2, frequency).subscribe(data => {
 
 
             data.author = JSON.parse(data.author);
@@ -60,7 +56,7 @@ export class PandasComponent {
 
                     data_transform_array.push({
                         _value: data.author[key].length,
-                        date: new Date(+key),
+                        date: new Date(+ key),
                         names: (data.author[key])
                     });
                 }
