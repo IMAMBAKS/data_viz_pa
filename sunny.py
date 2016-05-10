@@ -12,7 +12,7 @@ cors = CORS(allow_origins_list=['http://localhost:3000/', 'http://localhost:*', 
 df = pd.read_hdf('log_relatics.h5')
 
 
-def get_year(parameter,*args,freq: str='W') -> pd.DataFrame:
+def get_year(parameter,*args,freq: str='W') -> pd   .DataFrame:
     if args:
         df2 = df[parameter:args[0]]
     else:
@@ -41,7 +41,7 @@ class QuoteResourceSpecific:
         """Handles GET requests"""
         print(date2)
 
-        names2 = (get_year(date1, date2, freq='W').to_json(date_format='epoch'))
+        names2 = (get_year(date1, date2, freq='D').to_json(date_format='epoch'))
         quote = {
             'quote': 'I\'ve always been more interested in the future than in the past.',
             'author': names2

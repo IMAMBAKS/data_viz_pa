@@ -41,7 +41,7 @@ export class BarChartDirective implements OnChanges {
         let xAxis = d3.svg.axis()
             .scale(x)
             .orient('bottom')
-            .tickFormat(d3.time.format('%Y-%m-%d'));
+            .tickFormat(d3.time.format('%d-%b-%Y'));
 
         let yAxis = d3.svg.axis()
             .scale(y)
@@ -57,9 +57,17 @@ export class BarChartDirective implements OnChanges {
         function redraw(data) {
             // fill in here
 
+            console.log(data);
+
+            let total_list = [];
+            for (let d of data) {
+                total_list.push(d._value);
+            }
+
+            // let field_goal_attempts_max = d3.max(field_goal_attempts_list);
 
             x.domain(data.map((d, i) => d.date));
-            y.domain([0, 200]);
+            y.domain([0, d3.max(total_list)]);
 
 
             let bars = svg.selectAll('rect.bar')
@@ -101,6 +109,14 @@ export class BarChartDirective implements OnChanges {
                     .classed(d.clazz, true)
                     .call(d.axis);
             });
+
+            // rotate x-axis
+            svg.selectAll('.x text')
+                .attr('y', 0)
+                .attr('x', 9)
+                .attr('dy', '.35em')
+                .attr('transform', 'rotate(50)')
+                .style('text-anchor', 'start');
         }
 
 
