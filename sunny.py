@@ -8,11 +8,10 @@ from waitress import serve
 
 cors = CORS(allow_origins_list=['http://localhost:3000/', 'http://localhost:*', 'http://localhost:3000'])
 
-
 df = pd.read_hdf('log_relatics.h5')
 
 
-def get_year(parameter,*args,freq: str='W') -> pd   .DataFrame:
+def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
     if args:
         df2 = df[parameter:args[0]]
     else:
@@ -22,38 +21,59 @@ def get_year(parameter,*args,freq: str='W') -> pd   .DataFrame:
     return name
 
 
-names = (get_year('2015-2','2015-7', freq='W').to_json(date_format='epoch'))
+names = (get_year('2015-2', '2015-7', freq='W').to_json(date_format='epoch'))
+
 
 class QuoteResource:
     def on_get(self, req, resp):
+
+        date1 = req.get_param('date1')
+        freq = req.get_param('freq')
+
+        if req.get_param('date2') is not None:
+            date2 = req.get_param('date2')
+
+            try:
+                query = get_year(date1, date2, freq=freq).to_json(date_format='epoch')
+            except:
+                query = ''
+        else:
+
+            try:
+                query = get_year(date1, freq=freq).to_json(date_format='epoch')
+            except:
+                query = ''
+
         """Handles GET requests"""
         quote = {
             'quote': 'I\'ve always been more interested in the future than in the past.',
-            'author': names
+            'author': query
         }
 
         print(quote)
 
         resp.body = json.dumps(quote)
 
-class QuoteResourceSpecific:
-    def on_get(self, req, resp, date1,date2):
-        """Handles GET requests"""
-        print(date2)
 
-        names2 = (get_year(date1, date2, freq='D').to_json(date_format='epoch'))
-        quote = {
-            'quote': 'I\'ve always been more interested in the future than in the past.',
-            'author': names2
-        }
-
-        print(quote)
-
-        resp.body = json.dumps(quote)
+#
+# class QuoteResourceSpecific:
+#     def on_get(self, req, resp, date1, date2):
+#         """Handles GET requests"""
+#         print(date2)
+#
+#         names2 = (get_year(date1, date2, freq='D').to_json(date_format='epoch'))
+#         quote = {
+#             'quote': 'I\'ve always been more interested in the future than in the past.',
+#             'author': names2
+#         }
+#
+#         print(quote)
+#
+#         resp.body = json.dumps(quote)
 
 
 api = falcon.API(middleware=[cors.middleware])
 api.add_route('/quote', QuoteResource())
-api.add_route('/quote/{date1}/{date2}', QuoteResourceSpecific())
+# api.add_route('/quote/{date1}/{date2}', QuoteResourceSpecific())
 
 serve(api, host='127.0.0.1', port=80)
