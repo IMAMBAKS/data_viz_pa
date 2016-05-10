@@ -12,7 +12,7 @@ export class PostService {
 
     }
 
-    getPost(): any {
+    getPost(first_date, second_date): any {
 
 
         // let headers = new Headers({
@@ -24,7 +24,7 @@ export class PostService {
         // });
 
 
-        return this._http.get('http://localhost/quote')
+        return this._http.get(`http://localhost/quote/${first_date}/${second_date}`)
             .map(res => res.json());
     }
 }

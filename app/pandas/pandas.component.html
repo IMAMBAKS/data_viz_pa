@@ -1,4 +1,4 @@
-<form action="" class="form-horizontal" _lpchecked="1">
+<form #f="ngForm" [ngFormModel]="form" (ngSubmit)="getNewData()" class="form-horizontal">
 
     <fieldset>
         <legend>Query</legend>
@@ -6,23 +6,51 @@
         <div class="form-group">
             <label for="inputPandas" class="col-lg-2 control-label">First date</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputPandas" placeholder="Please insert the first date">
+                <input type="text"
+                       class="form-control"
+                       id="inputPandas"
+                       placeholder="yyyy-mm-dd"
+                       ngControl="first_date"
+                       #first_date="ngForm"
+                >
+                <div *ngIf="first_date.touched && first_date.errors">
+                    <div
+                            *ngIf="first_date.errors.required"
+                            class="alert alert-danger">first date is required
+                    </div>
+                    <div *ngIf="first_date.errors.cannotContainSpace"
+                         class="alert alert-danger">Date cannot contain space
+                    </div>
+                    <div *ngIf="first_date.errors.mustBeAValidDate"
+                         class="alert alert-danger">This is no date son.
+                    </div>
+                </div>
             </div>
             <label for="inputPandas2" class="col-lg-2 control-label">Second date</label>
             <div class="col-lg-10">
-                <input type="text" class="form-control" id="inputPandas2" placeholder="Please insert the second date">
+                <input type="text"
+                       class="form-control"
+                       id="inputPandas2"
+                       placeholder="yyyy-mm-dd"
+                       ngControl="second_date"
+                       #second_date="ngForm"
+
+                >
+
+                <div
+                        *ngIf="!second_date.valid"
+                        class="alert alert-danger">second date is required
+                </div>
+
             </div>
+
         </div>
+
+        <button class="btn btn-primary" type="submit" [disabled]="!f.valid">New Data</button>
 
     </fieldset>
 
-    <div class="form-group">
-        <div class="col-lg-10 col-log-offset-2">
-            <a class="btn btn-default" (click)='getNewData()'>New Data</a>
 
-
-        </div>
-    </div>
 
 
 </form>
@@ -44,7 +72,6 @@
 
 
     </div>
-
 
 
 </div>

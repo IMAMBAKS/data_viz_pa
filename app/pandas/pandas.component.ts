@@ -1,7 +1,8 @@
 import {Component} from '@angular/core';
 import {BarChartDirective} from '../bar-chart/bar-chart.directive';
 import {PostService} from './post.service';
-
+import {ControlGroup, FormBuilder, Validators} from '@angular/common';
+import {DateValidators} from './dateValidators';
 
 @Component({
     selector: 'pandas',
@@ -13,48 +14,41 @@ import {PostService} from './post.service';
 
 export class PandasComponent {
 
+
     active;
     bmai: any;
     koo: string;
 
-    constructor(private _postService: PostService) {
-
-        _postService.getPost().subscribe(data => {
+    form: ControlGroup;
 
 
-            // let data_transform_array: any = {'date': [], 'value': [], 'names': []};
+    // form = new ControlGroup( {
+    //     first_date: new Control( '', Validators.required ),
+    //     second_date: new Control( '', Validators.required )
+    // } );
 
-            // for (let key in data.author) {
-            //     console.log(key);
-            // };
+    constructor(private _postService: PostService, fb: FormBuilder) {
 
-            data.author = JSON.parse(data.author);
-
-
-            let data_transform_array: any = [];
-
-            for (let key in data.author) {
-
-                if (data.author.hasOwnProperty(key)) {
-
-                    data_transform_array.push({
-                        _value: data.author[key].length,
-                        date: new Date(+key),
-                        names: (data.author[key])
-                    });
-                }
-            }
-
-
-            this.bmai = data_transform_array;
+        this.form = fb.group({
+            first_date: ['', Validators.compose([
+                Validators.required,
+                DateValidators.cannotContainSpace,
+                DateValidators.mustBeAValidDate])],
+            second_date: ['', Validators.required],
         });
+
+
     }
 
     getNewData() {
 
-        this._postService.getPost().subscribe(data => {
+        let date1 = this.form.value.first_date;
+        let date2 = this.form.value.second_date;
 
-            // let data_transform_array: any = {'date': [], 'value': [], 'names': []};
+
+        this._postService.getPost(date1, date2).subscribe(data => {
+
+
             data.author = JSON.parse(data.author);
 
 
@@ -74,8 +68,10 @@ export class PandasComponent {
 
 
             this.bmai = data_transform_array;
-
         });
+
+
+        console.log(this.form.value);
     }
 
 }
