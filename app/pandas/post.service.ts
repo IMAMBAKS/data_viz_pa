@@ -1,9 +1,9 @@
 /**
  * Created by imambaks on 4-5-2016.
  */
-import {Http} from "@angular/http";
-import {Injectable} from "@angular/core";
-import "rxjs/add/operator/map";
+import {Http} from '@angular/http';
+import {Injectable} from '@angular/core';
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class PostService {
@@ -29,9 +29,11 @@ export class PostService {
             url = `http://localhost/quote?date1=${first_date}&date2=${second_date}&freq=${freq}`;
         } else {
 
-            url = `http://localhost/quote?date1=${first_date}&freq=W`;
+            url = `http://localhost/quote?date1=${first_date}&freq=${freq}`;
 
         }
+
+        console.log(url);
 
 
         return this._http.get(url)

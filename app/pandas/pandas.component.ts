@@ -1,8 +1,8 @@
-import {Component} from "@angular/core";
-import {BarChartDirective} from "../bar-chart/bar-chart.directive";
-import {PostService} from "./post.service";
-import {ControlGroup, FormBuilder, Validators} from "@angular/common";
-import {DateValidators} from "./dateValidators";
+import {Component} from '@angular/core';
+import {BarChartDirective} from '../bar-chart/bar-chart.directive';
+import {PostService} from './post.service';
+import {ControlGroup, FormBuilder, Validators} from '@angular/common';
+import {DateValidators} from './dateValidators';
 
 @Component({
     selector: 'pandas',
@@ -18,6 +18,7 @@ export class PandasComponent {
     active;
     bmai: any;
     koo: string;
+    areaWidth;
 
     choice;
 
@@ -33,6 +34,10 @@ export class PandasComponent {
             second_date: ['']
         });
 
+        this.choice = {
+            'freq': 'W'
+        };
+
 
     }
 
@@ -40,7 +45,7 @@ export class PandasComponent {
 
         let date1 = this.form.value.first_date;
         let date2 = this.form.value.second_date;
-        let frequency = this.choice;
+        let frequency = this.choice.freq;
 
         this._postService.getPost(date1, date2, frequency).subscribe(data => {
 
@@ -56,7 +61,7 @@ export class PandasComponent {
 
                     data_transform_array.push({
                         _value: data.author[key].length,
-                        date: new Date(+ key),
+                        date: new Date(+key),
                         names: (data.author[key])
                     });
                 }

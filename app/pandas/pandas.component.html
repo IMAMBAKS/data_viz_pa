@@ -16,13 +16,13 @@
                 <div *ngIf="first_date.touched && first_date.errors">
                     <div
                             *ngIf="first_date.errors.required"
-                            class="alert alert-danger">first date is required
+                            class="text-danger">first date is required
                     </div>
                     <div *ngIf="first_date.errors.cannotContainSpace"
-                         class="alert alert-danger">Date cannot contain space
+                         class="text-danger">Date cannot contain space
                     </div>
                     <div *ngIf="first_date.errors.mustBeAValidDate"
-                         class="alert alert-danger">This is no date son.
+                         class="text-danger">Specified date not valid
                     </div>
                 </div>
             </div>
@@ -43,29 +43,35 @@
         </div>
 
         <div class="form-group">
-            <label class="col-lg-2 control-label">Frequency</label>
+            <label class="col-lg-2 control-label">Aggregate by:</label>
             <div class="col-lg-10">
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionDay" value="D" [(ngModel)]="model.choice"
-                               #frequency="ngForm" >
+                        <input type="radio" name="optionsRadios" id="optionDay" value="D"
+                            #day [checked]="choice.freq == day.value" (click)="choice.freq = day.value"
+                        >
                         Day(s)
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionWeek" value="W" checked="" [(ngModel)]="model.choice">
+                        <input type="radio" name="optionsRadios" id="optionWeek" value="W"
+                                #week [checked]="choice.freq == week.value" (click)="choice.freq = week.value"
+                              >
                         Week(s)
                     </label>
                 </div>
                 <div class="radio">
                     <label>
-                        <input type="radio" name="optionsRadios" id="optionMonth" value="M" [(ngModel)]="model.choice">
+                        <input type="radio" name="optionsRadios" id="optionMonth" value="M"
+                                  #month [checked]="choice.freq == month.value" (click)="choice.freq = month.value"
+                              >
                         Month(s)
                     </label>
                 </div>
             </div>
         </div>
+
 
         <button class="btn btn-primary" type="submit" [disabled]="!f.valid">New Data</button>
 
@@ -78,15 +84,16 @@
 <div class="panel panel-default">
     <div class="panel-heading">
 
-        <h4>Users vs Time</h4>
+        <h4>Active users in time</h4>
 
 
     </div>
 
-    <div class="panel-body">
+    <div id="graphArea" class="panel-body">
 
 
         <myBarChart [barChartData]='bmai'>
+
         </myBarChart>
 
 

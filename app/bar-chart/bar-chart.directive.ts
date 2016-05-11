@@ -20,7 +20,7 @@ export class BarChartDirective implements OnChanges {
 
         // create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 30},
-            width = 800 - margin.right - margin.left,
+            width = document.getElementById('graphArea').clientWidth - margin.right - margin.left,
             height = 800 - margin.top - margin.bottom;
 
         let svg = this.divs.append('svg')
@@ -88,6 +88,9 @@ export class BarChartDirective implements OnChanges {
                 .attr('y', (d) => y(d._value))
                 .attr('height', (d) => y(0) - y(d._value));
 
+            bars
+                .on('mouseover', d => console.log(d));
+
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {
 
@@ -111,11 +114,10 @@ export class BarChartDirective implements OnChanges {
             });
 
             // rotate x-axis
+
             svg.selectAll('.x text')
-                .attr('y', 0)
-                .attr('x', 9)
-                .attr('dy', '.35em')
-                .attr('transform', 'rotate(50)')
+                // .attr('dy', '.35em')
+                .attr('transform', 'translate(-60,60)scale(0.9)rotate(-45)')
                 .style('text-anchor', 'start');
         }
 

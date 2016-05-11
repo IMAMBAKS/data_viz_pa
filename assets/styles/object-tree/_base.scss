@@ -44,6 +44,12 @@
 
 .bar {
   fill: tomato;
+
+ &:hover {
+   cursor: pointer;
+   fill: rgba(255, 102, 72, 0.84);
+ }
+
 }
 
 
