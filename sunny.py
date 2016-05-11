@@ -30,8 +30,18 @@ def get_top_ten_users(parameter, *args) -> pd.DataFrame:
 
     return name
 
+def get_top_ten_workspaces(parameter, *args) -> pd.DataFrame:
+    if args:
+        df2 = df[parameter:args[0]]
+    else:
+        df2 = df[parameter]
 
-names = (get_top_ten_users('2015').to_json())
+    name = df2.groupby('workspace_name')['workspace_name'].count().sort_values(ascending=False)[:10]
+
+    return name
+
+print(df.columns.values)
+names = (get_top_ten_workspaces('2015'))
 
 print(names)
 
