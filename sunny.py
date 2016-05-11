@@ -20,9 +20,20 @@ def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
     name = df2.groupby(pd.Grouper(freq=freq))['user_name'].unique()
     return name
 
+def get_top_ten_users(parameter, *args) -> pd.DataFrame:
+    if args:
+        df2 = df[parameter:args[0]]
+    else:
+        df2 = df[parameter]
 
-names = (get_year('2015-2', '2015-7', freq='W').to_json(date_format='epoch'))
+    name = df2.groupby('user_name')['user_name'].count().sort_values(ascending=False)[:10]
 
+    return name
+
+
+names = (get_top_ten_users('2015').to_json())
+
+print(names)
 
 class QuoteResource:
     def on_get(self, req, resp):
