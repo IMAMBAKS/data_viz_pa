@@ -17,9 +17,6 @@ export class PandasComponent {
 
     active;
     bmai: any;
-    koo: string;
-    areaWidth;
-
     choice;
 
     form: ControlGroup;
@@ -47,7 +44,8 @@ export class PandasComponent {
         let date2 = this.form.value.second_date;
         let frequency = this.choice.freq;
 
-        this._postService.getPost(date1, date2, frequency).subscribe(data => {
+        // Get activity data
+        this._postService.getActivityData(date1, date2, frequency).subscribe(data => {
 
 
             data.author = JSON.parse(data.author);
@@ -70,6 +68,26 @@ export class PandasComponent {
 
             this.bmai = data_transform_array;
         });
+
+        // Get top 10 workspaces data
+
+        this._postService.getTopTenWorkspaces(date1, date2).subscribe(data => {
+
+
+                let data_workspace_array: any = [];
+
+                for (let key of data) {
+                    data_workspace_array.push({
+                        workspace: key,
+                        value: data[key]
+                    });
+                }
+
+
+                console.log(data_workspace_array);
+
+            }
+        );
 
 
         console.log(this.form.value);

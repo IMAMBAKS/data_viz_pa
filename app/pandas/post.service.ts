@@ -12,16 +12,7 @@ export class PostService {
 
     }
 
-    getPost(first_date, second_date, freq): any {
-
-
-        // let headers = new Headers({
-        //     'access-control-request-method': 'GET'
-        // });
-        //
-        // let options = new RequestOptions({
-        //     headers: headers
-        // });
+    getActivityData(first_date, second_date, freq): any {
 
         let url: string;
 
@@ -39,4 +30,28 @@ export class PostService {
         return this._http.get(url)
             .map(res => res.json());
     }
+
+    getTopTenWorkspaces(first_date, second_date): any {
+
+        let url: string;
+
+        url = `http://localhost/workspaces?date1=${first_date}&date2=${second_date}`;
+
+        return this._http.get(url)
+            .map(res => res.json());
+
+    }
+
+    getTopTenUsers(first_date, second_date): any {
+
+        let url: string;
+
+
+        url = `http://localhost/users?date1=${first_date}&date2=${second_date}`;
+
+        return this._http.get(url)
+            .map(res => res.json());
+    }
+
+
 }
