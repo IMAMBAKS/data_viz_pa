@@ -91,9 +91,6 @@ export class PandasComponent {
 
 
                 this.hdata = data_workspace_array;
-                console.log('HALLO HE');
-                console.log(data);
-                console.log(this.hdata);
 
 
             }

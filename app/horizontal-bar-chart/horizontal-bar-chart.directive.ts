@@ -15,9 +15,6 @@ export class HorizontalBarChartDirective implements OnChanges {
 
         d3.select('.myHorizontalBarChartGraph').remove();
 
-        console.log('myhorizontalbarCHART: ');
-        console.log(barChartData);
-
 
         // create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 150},
@@ -33,7 +30,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
         // scales
         let x = d3.scale.linear()
-            .range([margin.left, width - margin.right]);
+            .range([0, width - (margin.right + margin.right)]);
 
         let y = d3.scale.ordinal()
             .rangeRoundBands([height - margin.bottom, margin.top], 0.1, .3);
@@ -49,7 +46,7 @@ export class HorizontalBarChartDirective implements OnChanges {
             .orient('left');
 
         let axisData = [
-            {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x2'},
+            {axis: xAxis, dx: margin.left, dy: (height - margin.bottom), clazz: 'x2'},
             {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y2'}
         ];
 
@@ -62,6 +59,7 @@ export class HorizontalBarChartDirective implements OnChanges {
                 total_list.push(+ d.value);
             }
             y.domain(data.map((d, i) => d.workspace));
+            console.log('max size is ' + d3.max(total_list));
             x.domain([0, d3.max(total_list)]);
 
 
@@ -75,15 +73,15 @@ export class HorizontalBarChartDirective implements OnChanges {
             bars
                 .attr('y', (d, i) => y(d.workspace))
                 .attr('height', y.rangeBand())
-                .attr('x', x(0))
-                .attr('width', 0)
+                .attr('x', margin.left)
+                .attr('width', x(0))
                 .transition()
                 .delay((d, i) => i * 50)
                 .duration(800)
                 .attr('width', (d) => {
                     console.log(d.value);
                     console.log(x(d.value));
-                    return x(d.value);
+                    return x(+d.value);
                 });
 
             // change colour of greatest 3 assets
