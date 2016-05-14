@@ -22,7 +22,7 @@ export class BarChartDirective implements OnChanges {
         // create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 30},
             width = document.getElementById('graphArea').clientWidth - margin.right - margin.left,
-            height = 800 - margin.top - margin.bottom;
+            height = 400 - margin.top - margin.bottom;
 
         let svg = this.divs.append('svg')
             .attr('width', width + margin.right + margin.left)
@@ -123,8 +123,9 @@ export class BarChartDirective implements OnChanges {
         }
 
         svg.append('text')
-            .attr('x', (width / 2))
+            .attr('x', (width / 3))
             .attr('y', 0 - (margin.top / 2))
+            .attr('text-anchor', 'start')
             .text(title)
             .classed('chart-title', true);
 
@@ -147,7 +148,7 @@ export class BarChartDirective implements OnChanges {
 
         // only render when barChartData exists
         if (this.barChartData) {
-            this.render(this.barChartData, 'Graph title');
+            this.render(this.barChartData, this.title);
         }
 
     }

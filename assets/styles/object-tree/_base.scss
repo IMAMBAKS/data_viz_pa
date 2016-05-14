@@ -26,7 +26,6 @@
 
 }
 
-
 .myGraphTwo {
   border-top: 1px rgba(gray, 0.3) solid;
   border-bottom: 1px rgba(gray, 0.3) solid;
@@ -45,13 +44,12 @@
 .bar {
   fill: tomato;
 
- &:hover {
-   cursor: pointer;
-   fill: rgba(255, 102, 72, 0.84);
- }
+  &:hover {
+    cursor: pointer;
+    fill: rgba(255, 102, 72, 0.84);
+  }
 
 }
-
 
 .axis {
 
@@ -65,6 +63,8 @@
     font-size: 1.1em;
   }
 
+}
 
-
+.chart-title {
+  font-size: 1.7em;
 }
