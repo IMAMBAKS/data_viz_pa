@@ -9,10 +9,11 @@ export class BarChartDirective implements OnChanges {
     // data input for my bar chart
     @Input('barChartData')
     barChartData;
+    @Input() title;
 
     public divs: any;
 
-    render(barChartData: any) {
+    render(barChartData: any, title:any) {
 
         d3.select('.myBarChartGraph').remove();
 
@@ -116,10 +117,16 @@ export class BarChartDirective implements OnChanges {
             // rotate x-axis
 
             svg.selectAll('.x text')
-                // .attr('dy', '.35em')
+            // .attr('dy', '.35em')
                 .attr('transform', 'translate(-60,60)scale(0.9)rotate(-45)')
                 .style('text-anchor', 'start');
         }
+
+        svg.append('text')
+            .attr('x', (width / 2))
+            .attr('y', 0 - (margin.top / 2))
+            .text(title)
+            .classed('chart-title', true);
 
 
         redraw(testData);
@@ -140,7 +147,7 @@ export class BarChartDirective implements OnChanges {
 
         // only render when barChartData exists
         if (this.barChartData) {
-            this.render(this.barChartData);
+            this.render(this.barChartData, 'Graph title');
         }
 
     }

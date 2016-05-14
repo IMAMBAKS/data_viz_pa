@@ -30,7 +30,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
         // scales
         let x = d3.scale.linear()
-            .range([0, width - (margin.right + margin.right)]);
+            .range([0, width - (margin.left + margin.right)]);
 
         let y = d3.scale.ordinal()
             .rangeRoundBands([height - margin.bottom, margin.top], 0.1, .3);
