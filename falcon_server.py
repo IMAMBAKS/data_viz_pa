@@ -12,107 +12,106 @@ df = pd.read_hdf('log_relatics.h5')
 
 
 def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
-	if args:
-		df2 = df[parameter:args[0]]
-	else:
-		df2 = df[parameter]
+    if args:
+        df2 = df[parameter:args[0]]
+    else:
+        df2 = df[parameter]
 
-	name = df2.groupby(pd.Grouper(freq=freq))['user_name'].unique()
-	return name
+    name = df2.groupby(pd.Grouper(freq=freq))['user_name'].unique()
+    return name
 
 
 def get_top_ten_users(parameter, *args) -> pd.DataFrame:
-	if args:
-		df2 = df[parameter:args[0]]
-	else:
-		df2 = df[parameter]
+    if args:
+        df2 = df[parameter:args[0]]
+    else:
+        df2 = df[parameter]
 
-	name = df2.groupby('user_name')['user_name'].count().sort_values(ascending=False)[:10]
+    name = df2.groupby('user_name')['user_name'].count().sort_values(ascending=False)[:10]
 
-	return name
+    return name
 
 
 def get_top_ten_workspaces(parameter, *args) -> pd.DataFrame:
-	if args:
-		df2 = df[parameter:args[0]]
-	else:
-		df2 = df[parameter]
+    if args:
+        df2 = df[parameter:args[0]]
+    else:
+        df2 = df[parameter]
 
-	name = df2.groupby('workspace_name')['workspace_name'].count().sort_values(ascending=False)[:10]
+    name = df2.groupby('workspace_name')['workspace_name'].count().sort_values(ascending=True)[-10:]
 
-	return name
+    return name
 
 
 class QuoteResource:
-	def on_get(self, req, resp):
+    def on_get(self, req, resp):
 
-		date1 = req.get_param('date1')
-		freq = req.get_param('freq')
+        date1 = req.get_param('date1')
+        freq = req.get_param('freq')
 
-		if req.get_param('date2') is not None:
-			date2 = req.get_param('date2')
+        if req.get_param('date2') is not None:
+            date2 = req.get_param('date2')
 
-			try:
-				query = get_year(date1, date2, freq=freq).to_json(date_format='epoch')
-			except:
-				query = ''
-		else:
+            try:
+                query = get_year(date1, date2, freq=freq).to_json(date_format='epoch')
+            except:
+                query = ''
+        else:
 
-			try:
-				query = get_year(date1, freq=freq).to_json(date_format='epoch')
-			except:
-				query = ''
+            try:
+                query = get_year(date1, freq=freq).to_json(date_format='epoch')
+            except:
+                query = ''
 
-		"""Handles GET requests"""
-		quote = {
-			'quote': 'I\'ve always been more interested in the future than in the past.',
-			'author': query
-		}
+        """Handles GET requests"""
+        quote = {
+            'quote': 'I\'ve always been more interested in the future than in the past.',
+            'author': query
+        }
 
-
-		resp.body = json.dumps(quote)
+        resp.body = json.dumps(quote)
 
 
 class WorkspaceResource:
-	def on_get(self, req, resp):
-		date1 = req.get_param('date1')
+    def on_get(self, req, resp):
+        date1 = req.get_param('date1')
 
-		if req.get_param('date2') is not None:
-			date2 = req.get_param('date2')
+        if req.get_param('date2') is not None:
+            date2 = req.get_param('date2')
 
-			try:
-				query = get_top_ten_workspaces(date1, date2).to_json()
-			except:
-				query = ''
-		else:
+            try:
+                query = get_top_ten_workspaces(date1, date2).to_json()
+            except:
+                query = ''
+        else:
 
-			try:
-				query = get_top_ten_workspaces(date1).to_json()
-			except:
-				query = ''
+            try:
+                query = get_top_ten_workspaces(date1).to_json()
+            except:
+                query = ''
 
-		resp.body = query
+        resp.body = query
 
 
 class UsersResource:
-	def on_get(self, req, resp):
-		date1 = req.get_param('date1')
+    def on_get(self, req, resp):
+        date1 = req.get_param('date1')
 
-		if req.get_param('date2') is not None:
-			date2 = req.get_param('date2')
+        if req.get_param('date2') is not None:
+            date2 = req.get_param('date2')
 
-			try:
-				query = get_top_ten_users(date1, date2).to_json()
-			except:
-				query = ''
-		else:
+            try:
+                query = get_top_ten_users(date1, date2).to_json()
+            except:
+                query = ''
+        else:
 
-			try:
-				query = get_top_ten_users(date1).to_json()
-			except:
-				query = ''
+            try:
+                query = get_top_ten_users(date1).to_json()
+            except:
+                query = ''
 
-		resp.body = query
+        resp.body = query
 
 
 api = falcon.API(middleware=[cors.middleware])

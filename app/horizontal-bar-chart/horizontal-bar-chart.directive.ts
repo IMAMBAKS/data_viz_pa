@@ -4,40 +4,40 @@ import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
     selector: 'myHorizontalBarChart'
 })
 
-export class BarChartDirective implements OnChanges {
+export class HorizontalBarChartDirective implements OnChanges {
 
     // data input for my bar chart
-    @Input('myHorizontalBarChart')
-    barChartData;
+    @Input() barChartData;
 
     public divs: any;
 
     render(barChartData: any) {
 
-        d3.select('svg').remove();
+        d3.select('.myHorizontalBarChartGraph').remove();
 
+        console.log('myhorizontalbarCHART: ');
         console.log(barChartData);
 
-        let testData = barChartData;
 
         // create window for your chart;
-        let margin = {top: 60, right: 60, bottom: 60, left: 30},
-            width = 800 - margin.right - margin.left,
-            height = 800 - margin.top - margin.bottom;
+        let margin = {top: 60, right: 60, bottom: 60, left: 150},
+            width = 1000 - margin.right - margin.left,
+            height = 500 - margin.top - margin.bottom;
 
         let svg = this.divs.append('svg')
             .attr('width', width + margin.right + margin.left)
             .attr('height', height + margin.top + margin.bottom)
-            .attr('class', 'myBarChartGraph')
+            .attr('class', 'myHorizontalBarChartGraph')
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
         // scales
-        let x = d3.scale.ordinal()
-            .rangeRoundBands([margin.left, width - margin.right], 0.1, .3);
+        let x = d3.scale.linear()
+            .range([margin.left, width - margin.right]);
 
-        let y = d3.scale.linear()
-            .range([height - margin.bottom, margin.top]);
+        let y = d3.scale.ordinal()
+            .rangeRoundBands([height - margin.bottom, margin.top], 0.1, .3);
+
 
         // axes
         let xAxis = d3.svg.axis()
@@ -57,9 +57,12 @@ export class BarChartDirective implements OnChanges {
         function redraw(data) {
             // fill in here
 
-
-            x.domain(data.map((d, i) => i));
-            y.domain([0, d3.max(data, (d) => + d)]);
+            let total_list = [];
+            for (let d of data) {
+                total_list.push(+d.value);
+            }
+            y.domain(data.map((d, i) => d.workspace));
+            x.domain([0, d3.max(total_list)]);
 
 
             let bars = svg.selectAll('rect.bar')
@@ -70,21 +73,20 @@ export class BarChartDirective implements OnChanges {
                 .classed('bar', true);
 
             bars
-                .attr('x', (d, i) => x(d))
-                .attr('width', x.rangeBand())
-                .attr('y', y(0))
-                .attr('height', 0)
+                .attr('y', (d, i) => y(d.workspace))
+                .attr('height', y.rangeBand())
+                .attr('x', x(0))
+                .attr('width', 0)
                 .transition()
                 .delay((d, i) => i * 50)
                 .duration(800)
-                .attr('y', (d) => y(d))
-                .attr('height', (d) => y(0) - y(d.value));
+                .attr('width', (d) => x(d.value));
 
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {
 
 
-                if (d < 30) {
+                if (d.value < 30) {
                     return 'gray';
                 }
             });
@@ -104,7 +106,7 @@ export class BarChartDirective implements OnChanges {
         }
 
 
-        redraw(testData);
+        redraw(barChartData);
 
 
     }

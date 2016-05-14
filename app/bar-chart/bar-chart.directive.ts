@@ -14,7 +14,7 @@ export class BarChartDirective implements OnChanges {
 
     render(barChartData: any) {
 
-        d3.select('svg').remove();
+        d3.select('.myBarChartGraph').remove();
 
         let testData = barChartData;
 

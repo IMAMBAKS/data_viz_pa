@@ -3,11 +3,12 @@ import {BarChartDirective} from '../bar-chart/bar-chart.directive';
 import {PostService} from './post.service';
 import {ControlGroup, FormBuilder, Validators} from '@angular/common';
 import {DateValidators} from './dateValidators';
+import {HorizontalBarChartDirective} from '../horizontal-bar-chart/horizontal-bar-chart.directive';
 
 @Component({
     selector: 'pandas',
     templateUrl: 'app/pandas/pandas.component.html',
-    directives: [BarChartDirective],
+    directives: [BarChartDirective, HorizontalBarChartDirective],
     providers: [PostService]
 })
 
@@ -18,6 +19,7 @@ export class PandasComponent {
     active;
     bmai: any;
     choice;
+    hdata;
 
     form: ControlGroup;
 
@@ -59,7 +61,7 @@ export class PandasComponent {
 
                     data_transform_array.push({
                         _value: data.author[key].length,
-                        date: new Date(+key),
+                        date: new Date(+ key),
                         names: (data.author[key])
                     });
                 }
@@ -76,21 +78,28 @@ export class PandasComponent {
 
                 let data_workspace_array: any = [];
 
-                for (let key of data) {
-                    data_workspace_array.push({
-                        workspace: key,
-                        value: data[key]
-                    });
+                for (let key in data) {
+
+                    if (data.hasOwnProperty(key)) {
+                        data_workspace_array.push({
+                            workspace: key,
+                            value: data[key]
+                        });
+
+                    }
                 }
 
 
-                console.log(data_workspace_array);
+                this.hdata = data_workspace_array;
+                console.log('HALLO HE');
+                console.log(data);
+                console.log(this.hdata);
+
 
             }
         );
 
 
-        console.log(this.form.value);
     }
 
 }
