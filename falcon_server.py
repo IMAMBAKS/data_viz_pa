@@ -38,7 +38,7 @@ def get_top_ten_workspaces(parameter, *args) -> pd.DataFrame:
     else:
         df2 = df[parameter]
 
-    name = df2.groupby('workspace_name')['workspace_name'].count().sort_values(ascending=True)[-10:]
+    name = df2.groupby('workspace_name')['user_name'].nunique().sort_values(ascending=True)[-10:]
 
     return name
 

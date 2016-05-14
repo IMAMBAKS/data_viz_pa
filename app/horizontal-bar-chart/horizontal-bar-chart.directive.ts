@@ -49,8 +49,8 @@ export class HorizontalBarChartDirective implements OnChanges {
             .orient('left');
 
         let axisData = [
-            {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x'},
-            {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
+            {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x2'},
+            {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y2'}
         ];
 
         // standard graph drawing function
@@ -59,7 +59,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
             let total_list = [];
             for (let d of data) {
-                total_list.push(+d.value);
+                total_list.push(+ d.value);
             }
             y.domain(data.map((d, i) => d.workspace));
             x.domain([0, d3.max(total_list)]);
@@ -80,7 +80,11 @@ export class HorizontalBarChartDirective implements OnChanges {
                 .transition()
                 .delay((d, i) => i * 50)
                 .duration(800)
-                .attr('width', (d) => x(d.value));
+                .attr('width', (d) => {
+                    console.log(d.value);
+                    console.log(x(d.value));
+                    return x(d.value);
+                });
 
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {
