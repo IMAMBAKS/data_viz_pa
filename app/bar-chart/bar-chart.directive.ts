@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
+import {Directive, ElementRef, Input, Output, OnChanges, EventEmitter} from '@angular/core';
 
 @Directive({
     selector: 'myBarChart'
@@ -10,10 +10,12 @@ export class BarChartDirective implements OnChanges {
     @Input('barChartData')
     barChartData;
     @Input() title;
+    @Output() hovering = new EventEmitter();
 
     public divs: any;
 
-    render(barChartData: any, title:any) {
+    render(barChartData: any, title: any) {
+
 
         d3.select('.myBarChartGraph').remove();
 
@@ -54,8 +56,12 @@ export class BarChartDirective implements OnChanges {
             {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
         ];
 
+        let hover = this.hovering;
+
         // standard graph drawing function
-        function redraw(data) {
+        function redraw(data, _hover) {
+
+
             // fill in here
 
             console.log(data);
@@ -90,8 +96,11 @@ export class BarChartDirective implements OnChanges {
                 .attr('height', (d) => y(0) - y(d._value));
 
             bars
-                .on('mouseover', d => console.log(d));
+                .on('mouseover', function (d) {
 
+                    _hover.emit({newValue: d});
+
+                });
             // change colour of greatest 3 assets
             bars.style('fill', (d) => {
 
@@ -122,15 +131,30 @@ export class BarChartDirective implements OnChanges {
                 .style('text-anchor', 'start');
         }
 
+
+        // Append textual things
         svg.append('text')
             .attr('x', (width / 3))
-            .attr('y', 0 - (margin.top / 2))
+            .attr('y', 0 - (margin.top / 3))
             .attr('text-anchor', 'start')
             .text(title)
             .classed('chart-title', true);
 
+        svg.append('text')
+            .attr('x', (width / 2))
+            .attr('y', height + margin.bottom / 2)
+            .attr('text-anchor', 'end')
+            .text('time')
+            .style('font-weight', 'bold');
 
-        redraw(testData);
+        svg.append('text')
+            .attr('text-anchor', 'start')
+            .attr('transform', `translate(${'-20'},${height / 2})rotate(-90)`)
+            .text('users')
+            .style('font-weight', 'bold');
+
+
+        redraw(testData, hover);
 
 
     }
@@ -150,6 +174,7 @@ export class BarChartDirective implements OnChanges {
         if (this.barChartData) {
             this.render(this.barChartData, this.title);
         }
+
 
     }
 

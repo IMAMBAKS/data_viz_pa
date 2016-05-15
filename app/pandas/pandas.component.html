@@ -84,14 +84,23 @@
 
         </form>
     </div>
+    <div class="col-md-6">
+                <div><strong>Totaal gebruikers:</strong> {{barData._value}}</div>
+        <div><strong>Namen:</strong>
 
+            <span *ngFor="let user of barData.names">
+                {{user}},
+            </span>
+
+        </div>
+    </div>
 
 </div>
 <div class="panel panel-default">
     <div id="graphArea" class="panel-body">
 
 
-        <myBarChart [barChartData]='bmai' [title]="'This is the title hihi huhu'">
+        <myBarChart [barChartData]='bmai' [title]="'Active users in time'" (hovering)="logToConsoleEvent($event)">
 
         </myBarChart>
 
@@ -107,12 +116,6 @@
     <div class="col-md-6">
 
         <div class="panel panel-default">
-            <div class="panel-heading">
-
-                <h4>Workspaces with most active users</h4>
-
-
-            </div>
 
             <div id="graphArea2" class="panel-body">
 
@@ -131,14 +134,8 @@
     <div class="col-md-6">
 
         <div class="panel panel-default">
-            <div class="panel-heading">
 
-                <h4>Workspaces with most active users</h4>
-
-
-            </div>
-
-            <div id="graphArea2" class="panel-body">
+            <div id="graphArea3" class="panel-body">
 
                 <myHorizontalBarChart [barChartData]='hdata'>
 

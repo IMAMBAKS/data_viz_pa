@@ -13,12 +13,11 @@ export class HorizontalBarChartDirective implements OnChanges {
 
     render(barChartData: any) {
 
-        d3.select('.myHorizontalBarChartGraph').remove();
-
+        this.divs.select('svg').remove();
 
         // create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 150},
-            width = 1000 - margin.right - margin.left,
+            width = document.getElementById('graphArea2').clientWidth - margin.right - margin.left,
             height = 500 - margin.top - margin.bottom;
 
         let svg = this.divs.append('svg')
@@ -81,17 +80,10 @@ export class HorizontalBarChartDirective implements OnChanges {
                 .attr('width', (d) => {
                     console.log(d.value);
                     console.log(x(d.value));
-                    return x(+d.value);
-                });
+                    return x(+ d.value);
+                })
+                .style('fill', 'gray');
 
-            // change colour of greatest 3 assets
-            bars.style('fill', (d) => {
-
-
-                if (d.value < 30) {
-                    return 'gray';
-                }
-            });
 
             let axis = svg.selectAll('g.axis')
                 .data(axisData);
@@ -105,6 +97,16 @@ export class HorizontalBarChartDirective implements OnChanges {
                     .classed(d.clazz, true)
                     .call(d.axis);
             });
+
+
+            // Append textual things
+            svg.append('text')
+                .attr('x', (width / 3))
+                .attr('y', 0 - (margin.top / 3))
+                .attr('text-anchor', 'start')
+                .text('Most popular workspaces')
+                .classed('chart-title', true);
+
         }
 
 

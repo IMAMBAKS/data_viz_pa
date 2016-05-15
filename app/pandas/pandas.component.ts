@@ -20,6 +20,7 @@ export class PandasComponent {
     bmai: any;
     choice;
     hdata;
+    barData;
 
     form: ControlGroup;
 
@@ -37,6 +38,14 @@ export class PandasComponent {
             'freq': 'W'
         };
 
+        this.barData = '';
+
+
+    }
+
+    logToConsoleEvent($event) {
+
+        this.barData = $event.newValue;
 
     }
 
