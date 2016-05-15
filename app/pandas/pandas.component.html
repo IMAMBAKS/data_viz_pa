@@ -9,7 +9,7 @@
 
                 <div class="form-group">
                     <label for="inputPandas" class="col-lg-2 control-label">First date</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <input type="text"
                                class="form-control"
                                id="inputPandas"
@@ -31,7 +31,7 @@
                         </div>
                     </div>
                     <label for="inputPandas2" class="col-lg-2 control-label">Second date</label>
-                    <div class="col-lg-4">
+                    <div class="col-lg-3">
                         <input type="text"
                                class="form-control"
                                id="inputPandas2"
@@ -99,7 +99,7 @@
 <div class="panel panel-default">
 
     <div id="graphArea" class="panel-body">
-        <i class="fa fa-home fa-4x"></i>
+        <i class="fa fa-home fa-3x"></i>
 
         <myBarChart [barChartData]='bmai' [title]="'Active users in time'" (hovering)="logToConsoleEvent($event)">
 
@@ -121,7 +121,7 @@
             <div id="graphArea2" class="panel-body">
 
 
-                <i class="fa fa-clone fa-4x"></i>
+                <i class="fa fa-clone fa-3x"></i>
 
                 <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'">
 
@@ -142,7 +142,7 @@
 
             <div id="graphArea3" class="panel-body">
 
-                <i class="fa fa-user fa-4x"></i>
+                <i class="fa fa-user fa-3x"></i>
 
 
                 <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'">
