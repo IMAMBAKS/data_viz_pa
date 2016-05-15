@@ -8,15 +8,16 @@ export class HorizontalBarChartDirective implements OnChanges {
 
     // data input for my bar chart
     @Input() barChartData;
+    @Input() title;
 
     public divs: any;
 
-    render(barChartData: any) {
+    render(barChartData: any, title: any) {
 
         this.divs.select('svg').remove();
 
         // create window for your chart;
-        let margin = {top: 60, right: 60, bottom: 60, left: 150},
+        let margin = {top: 30, right: 60, bottom: 60, left: 150},
             width = document.getElementById('graphArea2').clientWidth - margin.right - margin.left,
             height = 500 - margin.top - margin.bottom;
 
@@ -99,15 +100,16 @@ export class HorizontalBarChartDirective implements OnChanges {
             });
 
 
-            // Append textual things
-            svg.append('text')
-                .attr('x', (width / 3))
-                .attr('y', 0 - (margin.top / 3))
-                .attr('text-anchor', 'start')
-                .text('Most popular workspaces')
-                .classed('chart-title', true);
-
         }
+
+
+        // Append textual things
+        svg.append('text')
+            .attr('x', (width / 3))
+            .attr('y', 0 - (margin.top / 3))
+            .attr('text-anchor', 'start')
+            .text(title)
+            .classed('chart-title', true);
 
 
         redraw(barChartData);
@@ -128,7 +130,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
         // only render when barChartData exists
         if (this.barChartData) {
-            this.render(this.barChartData);
+            this.render(this.barChartData, this.title);
         }
 
     }

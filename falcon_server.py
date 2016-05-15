@@ -27,7 +27,7 @@ def get_top_ten_users(parameter, *args) -> pd.DataFrame:
     else:
         df2 = df[parameter]
 
-    name = df2.groupby('user_name')['user_name'].count().sort_values(ascending=False)[:10]
+    name = df2.groupby('user_name')['user_name'].count().sort_values(ascending=True)[-10:]
 
     return name
 

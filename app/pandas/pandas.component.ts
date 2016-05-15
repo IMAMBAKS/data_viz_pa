@@ -21,6 +21,7 @@ export class PandasComponent {
     choice;
     hdata;
     barData;
+    userData;
 
     form: ControlGroup;
 
@@ -85,6 +86,27 @@ export class PandasComponent {
         this._postService.getTopTenWorkspaces(date1, date2).subscribe(data => {
 
 
+            let data_workspace_array: any = [];
+
+            for (let key in data) {
+
+                if (data.hasOwnProperty(key)) {
+                    data_workspace_array.push({
+                        workspace: key,
+                        value: data[key]
+                    });
+
+                }
+            }
+
+
+            this.hdata = data_workspace_array;
+
+
+        });
+        this._postService.getTopTenUsers(date1, date2).subscribe(data => {
+
+
                 let data_workspace_array: any = [];
 
                 for (let key in data) {
@@ -99,7 +121,7 @@ export class PandasComponent {
                 }
 
 
-                this.hdata = data_workspace_array;
+                this.userData = data_workspace_array;
 
 
             }
