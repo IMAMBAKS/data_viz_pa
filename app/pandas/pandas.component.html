@@ -101,7 +101,7 @@
     <div id="graphArea" class="panel-body">
         <i class="fa fa-home fa-3x"></i>
 
-        <myBarChart [barChartData]='timeData' [title]="'Active users in time'" (hovering)="logToConsoleEvent($event)">
+        <myBarChart [barChartData]='timeData' [title]="'Active users in time'" (hovering)="readBarData($event)">
 
         </myBarChart>
 
@@ -123,7 +123,7 @@
 
                 <i class="fa fa-clone fa-3x"></i>
 
-                <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'">
+                <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'" [xAxis]="'Active users'">
 
                 </myHorizontalBarChart>
 
@@ -145,7 +145,7 @@
                 <i class="fa fa-user fa-3x"></i>
 
 
-                <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'">
+                <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'" [xAxis]="'Workspace entries'">
 
                 </myHorizontalBarChart>
 

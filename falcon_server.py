@@ -63,7 +63,7 @@ class UserActivity:
             except:
                 query = ''
 
-        resp.body = json.dumps(query)
+        resp.body = query
 
 
 class WorkspaceResource:

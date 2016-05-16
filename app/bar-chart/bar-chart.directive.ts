@@ -1,5 +1,7 @@
 import {Directive, ElementRef, Input, Output, OnChanges, EventEmitter} from '@angular/core';
 
+declare let d3;
+
 @Directive({
     selector: 'myBarChart'
 })
@@ -56,6 +58,7 @@ export class BarChartDirective implements OnChanges {
             {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
         ];
 
+
         let hover = this.hovering;
 
         // standard graph drawing function
@@ -75,7 +78,6 @@ export class BarChartDirective implements OnChanges {
 
             x.domain(data.map((d, i) => d.date));
             y.domain([0, d3.max(total_list)]);
-
 
             let bars = svg.selectAll('rect.bar')
                 .data(data);
@@ -101,14 +103,44 @@ export class BarChartDirective implements OnChanges {
                     _hover.emit({newValue: d});
 
                 });
-            // change colour of greatest 3 assets
-            bars.style('fill', (d) => {
+
+            // EXPERIMENTAL CREATE CIRCLE
+            let circles = svg.selectAll('circle.bar')
+                .data(data);
+
+            circles.enter().append('circle');
+
+            circles
+                .attr('r', '0')
+                .attr('cx', d => x(d.date) + x.rangeBand() / 2)
+                .attr('cy', y(0))
+                .transition()
+                .delay((d, i) => i * 50)
+                .duration(800)
+                .attr('r', '3')
+                .attr('cx', d => x(d.date) + x.rangeBand() / 2)
+                .attr('cy', d => y(d._value))
+                .style('fill', 'steelblue');
+
+            // EXPERIMENTAL PATH
+
+            let line = d3.svg.line()
+                .interpolate('cardinal')
+                .x(d => x(d.date) + x.rangeBand() / 2)
+                .y(d => y(d._value));
 
 
-                if (d.value < 30) {
-                    return 'gray';
-                }
-            });
+            svg.append('path')
+                .datum(data)
+                .transition()
+                .delay((d, i) => i * 50)
+                .duration(800)
+                .attr('class', 'line')
+                .attr('d', line);
+
+
+            // let lines = svg.selectAll('lines.bar').data(data)
+
 
             let axis = svg.selectAll('g.axis')
                 .data(axisData);
@@ -149,7 +181,7 @@ export class BarChartDirective implements OnChanges {
 
         svg.append('text')
             .attr('text-anchor', 'start')
-            .attr('transform', `translate(${'-20'},${height / 2})rotate(-90)`)
+            .attr('transform', `translate(${'40'},${height / 2})rotate(-90)`)
             .text('users')
             .style('font-weight', 'bold');
 

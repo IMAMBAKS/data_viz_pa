@@ -45,12 +45,13 @@ export class PandasComponent {
 
     }
 
-    logToConsoleEvent($event) {
+    readBarData($event) {
 
         this.barData = $event.newValue;
 
     }
 
+    // Retrieve data from the server
     getNewData() {
 
         // Retrieve form values

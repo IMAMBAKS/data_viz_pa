@@ -9,15 +9,16 @@ export class HorizontalBarChartDirective implements OnChanges {
     // data input for my bar chart
     @Input() barChartData;
     @Input() title;
+    @Input() xAxis;
 
     public divs: any;
 
-    render(barChartData: any, title: any) {
+    render(barChartData: any, title: any, xAxisLabel?: any) {
 
         this.divs.select('svg').remove();
 
         // create window for your chart;
-        let margin = {top: 30, right: 60, bottom: 60, left: 150},
+        let margin = {top: 40, right: 60, bottom: 40, left: 150},
             width = document.getElementById('graphArea2').clientWidth - margin.right - margin.left,
             height = 500 - margin.top - margin.bottom;
 
@@ -46,8 +47,8 @@ export class HorizontalBarChartDirective implements OnChanges {
             .orient('left');
 
         let axisData = [
-            {axis: xAxis, dx: margin.left, dy: (height - margin.bottom), clazz: 'x2'},
-            {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y2'}
+            {axis: xAxis, dx: margin.left, dy: (height - margin.bottom), clazz: 'x'},
+            {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
         ];
 
         // standard graph drawing function
@@ -111,6 +112,13 @@ export class HorizontalBarChartDirective implements OnChanges {
             .text(title)
             .classed('chart-title', true);
 
+        svg.append('text')
+            .attr('x', (width / 2))
+            .attr('y', height + margin.bottom / 2)
+            .attr('text-anchor', 'end')
+            .text(xAxisLabel)
+            .style('font-weight', 'bold');
+
 
         redraw(barChartData);
 
@@ -130,7 +138,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
         // only render when barChartData exists
         if (this.barChartData) {
-            this.render(this.barChartData, this.title);
+            this.render(this.barChartData, this.title, this.xAxis);
         }
 
     }
