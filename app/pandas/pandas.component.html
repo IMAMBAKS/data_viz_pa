@@ -1,6 +1,6 @@
 <div class="row">
-    <div class="col-md-4">
-        <form #f="ngForm" [ngFormModel]="form" (ngSubmit)="getNewData()" class="form-horizontal">
+    <div class="col-md-12" style="background: rgba(226, 226, 226, 0.11);">
+        <form #f="ngForm" [ngFormModel]="form" (ngSubmit)="getNewData()" class="form-horizontal" >
 
 
             <fieldset>
@@ -48,7 +48,7 @@
 
                 <div class="form-group">
                     <label class="col-lg-2 control-label">Aggregate by:</label>
-                    <div class="col-lg-10">
+                    <div class="col-lg-4">
                         <div class="radio">
                             <label>
                                 <input type="radio" name="optionsRadios" id="optionDay" value="D"
@@ -76,26 +76,18 @@
                     </div>
                 </div>
 
-
                 <button class="btn btn-primary" type="submit" [disabled]="!f.valid">New Data</button>
+
 
             </fieldset>
 
 
         </form>
     </div>
-    <div class="col-md-6">
-        <div><strong>Totaal gebruikers:</strong> {{barData._value}}</div>
-        <div><strong>Namen:</strong>
 
-            <span *ngFor="let user of barData.names">
-                {{user}},
-            </span>
-
-        </div>
-    </div>
 
 </div>
+
 <div class="panel panel-default">
 
     <div id="graphArea" class="panel-body">
@@ -114,6 +106,22 @@
 
 <div class="row">
 
+    <div class="col-md-12">
+        <div><strong>Totaal gebruikers:</strong> {{barData._value}}</div>
+        <div><strong>Namen:</strong>
+
+            <span *ngFor="let user of barData.names">
+                {{user}},
+            </span>
+
+        </div>
+    </div>
+
+</div>
+
+
+<div class="row">
+
     <div class="col-md-6">
 
         <div class="panel panel-default">
@@ -123,7 +131,8 @@
 
                 <i class="fa fa-clone fa-3x"></i>
 
-                <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'" [xAxis]="'Active users'">
+                <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'"
+                                      [xAxis]="'Active users'">
 
                 </myHorizontalBarChart>
 
@@ -145,7 +154,8 @@
                 <i class="fa fa-user fa-3x"></i>
 
 
-                <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'" [xAxis]="'Workspace entries'">
+                <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'"
+                                      [xAxis]="'Workspace entries'">
 
                 </myHorizontalBarChart>
 

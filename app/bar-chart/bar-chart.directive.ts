@@ -92,7 +92,7 @@ export class BarChartDirective implements OnChanges {
                 .attr('y', y(0))
                 .attr('height', 0)
                 .transition()
-                .delay((d, i) => i * 50)
+                .delay((d, i) => i * 0)
                 .duration(800)
                 .attr('y', (d) => y(d._value))
                 .attr('height', (d) => y(0) - y(d._value));
@@ -130,13 +130,21 @@ export class BarChartDirective implements OnChanges {
                 .y(d => y(d._value));
 
 
-            svg.append('path')
+            let path = svg.append('path')
                 .datum(data)
-                .transition()
-                .delay((d, i) => i * 50)
-                .duration(800)
                 .attr('class', 'line')
                 .attr('d', line);
+
+            let totalLength = path.node().getTotalLength();
+
+            path
+                .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+                .attr('stroke-dashoffset', totalLength)
+                .transition()
+                .delay(500)
+                .duration(2000)
+                .ease('linear')
+                .attr('stroke-dashoffset', 0);
 
 
             // let lines = svg.selectAll('lines.bar').data(data)

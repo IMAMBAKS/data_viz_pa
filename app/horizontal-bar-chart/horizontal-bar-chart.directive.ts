@@ -84,7 +84,18 @@ export class HorizontalBarChartDirective implements OnChanges {
                     console.log(x(d.value));
                     return x(+ d.value);
                 })
-                .style('fill', 'gray');
+                .style('fill', '#D3D3D3');
+
+            // EXPERIMENTAL CREATE CIRCLE
+            let textValues = svg.selectAll('text.bar')
+                .data(data);
+
+            textValues.enter().append('text')
+                .attr('x', d => x(d.value) + margin.left * 0.85)
+                .attr('text-anchor', 'middle')
+                .attr('y', d => y(d.workspace) + y.rangeBand() / 2)
+                .text(d => d.value)
+                .style('fill', 'white');
 
 
             let axis = svg.selectAll('g.axis')
