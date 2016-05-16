@@ -43,7 +43,7 @@ def get_top_ten_workspaces(parameter, *args) -> pd.DataFrame:
     return name
 
 
-class QuoteResource:
+class UserActivity:
     def on_get(self, req, resp):
 
         date1 = req.get_param('date1')
@@ -63,13 +63,7 @@ class QuoteResource:
             except:
                 query = ''
 
-        """Handles GET requests"""
-        quote = {
-            'quote': 'I\'ve always been more interested in the future than in the past.',
-            'author': query
-        }
-
-        resp.body = json.dumps(quote)
+        resp.body = json.dumps(query)
 
 
 class WorkspaceResource:
@@ -115,7 +109,7 @@ class UsersResource:
 
 
 api = falcon.API(middleware=[cors.middleware])
-api.add_route('/quote', QuoteResource())
+api.add_route('/activity', UserActivity())
 api.add_route('/workspaces', WorkspaceResource())
 api.add_route('/users', UsersResource())
 

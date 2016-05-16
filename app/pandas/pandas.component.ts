@@ -15,18 +15,19 @@ import {HorizontalBarChartDirective} from '../horizontal-bar-chart/horizontal-ba
 
 export class PandasComponent {
 
-
-    active;
-    bmai: any;
+    // Define variables
+    timeData: any;
     choice;
     hdata;
     barData;
     userData;
 
+    // Define a form variable
     form: ControlGroup;
 
     constructor(private _postService: PostService, fb: FormBuilder) {
 
+        // Created the form variables/validators
         this.form = fb.group({
             first_date: ['', Validators.compose([
                 Validators.required,
@@ -52,6 +53,7 @@ export class PandasComponent {
 
     getNewData() {
 
+        // Retrieve form values
         let date1 = this.form.value.first_date;
         let date2 = this.form.value.second_date;
         let frequency = this.choice.freq;
@@ -60,29 +62,25 @@ export class PandasComponent {
         this._postService.getActivityData(date1, date2, frequency).subscribe(data => {
 
 
-            data.author = JSON.parse(data.author);
+            let data_transformed_array: any = [];
 
+            for (let key in data) {
 
-            let data_transform_array: any = [];
+                if (data.hasOwnProperty(key)) {
 
-            for (let key in data.author) {
-
-                if (data.author.hasOwnProperty(key)) {
-
-                    data_transform_array.push({
-                        _value: data.author[key].length,
+                    data_transformed_array.push({
+                        _value: data[key].length,
                         date: new Date(+ key),
-                        names: (data.author[key])
+                        names: (data[key])
                     });
                 }
             }
 
 
-            this.bmai = data_transform_array;
+            this.timeData = data_transformed_array;
         });
 
         // Get top 10 workspaces data
-
         this._postService.getTopTenWorkspaces(date1, date2).subscribe(data => {
 
 

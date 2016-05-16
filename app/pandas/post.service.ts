@@ -17,10 +17,10 @@ export class PostService {
         let url: string;
 
         if (freq !== '') {
-            url = `http://localhost/quote?date1=${first_date}&date2=${second_date}&freq=${freq}`;
+            url = `http://localhost/activity?date1=${first_date}&date2=${second_date}&freq=${freq}`;
         } else {
 
-            url = `http://localhost/quote?date1=${first_date}&freq=${freq}`;
+            url = `http://localhost/activity?date1=${first_date}&freq=${freq}`;
 
         }
 
