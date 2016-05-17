@@ -1,7 +1,8 @@
-import {Directive, ElementRef, Input, OnChanges} from '@angular/core';
+import {Directive, ElementRef, Input, OnChanges, HostListener} from '@angular/core';
 
 @Directive({
-    selector: 'myHorizontalBarChart'
+    selector: 'myHorizontalBarChart',
+
 })
 
 export class HorizontalBarChartDirective implements OnChanges {
@@ -10,20 +11,14 @@ export class HorizontalBarChartDirective implements OnChanges {
     @Input() barChartData;
     @Input() title;
     @Input() xAxis;
-
     public divs: any;
+
+    @HostListener('window:resize', ['$event.target']) onClick() {
+        this.render(this.barChartData, this.title, this.xAxis);
+    };
 
     render(barChartData: any, title: any, xAxisLabel?: any) {
 
-        // Resize the chart
-        let resize = d => {
-            this.divs.select('svg').remove();
-            console.log('hello2');
-            this.render(this.barChartData, this.title, this.xAxis);
-
-        };
-
-        d3.select(window).on('resize.two', resize);
 
         this.divs.select('svg').remove();
 
@@ -67,7 +62,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
             let total_list = [];
             for (let d of data) {
-                total_list.push(+d.value);
+                total_list.push(+ d.value);
             }
             y.domain(data.map((d, i) => d.workspace));
             x.domain([0, d3.max(total_list)]);
@@ -89,7 +84,7 @@ export class HorizontalBarChartDirective implements OnChanges {
                 .delay((d, i) => i * 50)
                 .duration(800)
                 .attr('width', (d) => {
-                    return x(+d.value);
+                    return x(+ d.value);
                 })
                 .style('fill', '#D3D3D3');
 

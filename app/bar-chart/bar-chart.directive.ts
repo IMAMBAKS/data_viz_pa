@@ -1,4 +1,4 @@
-import {Directive, ElementRef, Input, Output, OnChanges, EventEmitter} from '@angular/core';
+import {Directive, ElementRef, Input, Output, OnChanges, EventEmitter, HostListener} from '@angular/core';
 
 declare let d3;
 
@@ -15,19 +15,11 @@ export class BarChartDirective implements OnChanges {
 
     public divs: any;
 
+    @HostListener('window:resize', ['$event.target']) onClick() {
+        this.render(this.barChartData, this.title);
+    };
+
     render(barChartData: any, title: any) {
-
-        // Resize a function
-        let resize = d => {
-            this.divs.select('svg').remove();
-            console.log('hello1');
-            this.render(this.barChartData, this.title);
-
-        };
-
-
-        d3.select(window).on('resize.one', resize);
-
 
         // Cleanup current svg
         this.divs.select('svg').remove();
