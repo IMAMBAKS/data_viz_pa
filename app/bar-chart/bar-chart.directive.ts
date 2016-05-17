@@ -25,7 +25,8 @@ export class BarChartDirective implements OnChanges {
 
         };
 
-        d3.select(window).on('resize', resize);
+
+        d3.select(window).on('resize.one', resize);
 
 
         // Cleanup current svg

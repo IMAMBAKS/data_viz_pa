@@ -19,11 +19,11 @@ export class HorizontalBarChartDirective implements OnChanges {
         let resize = d => {
             this.divs.select('svg').remove();
             console.log('hello2');
-            // this.render(this.barChartData, this.title, this.xAxis);
+            this.render(this.barChartData, this.title, this.xAxis);
 
         };
 
-        d3.select(window).on('resize', resize);
+        d3.select(window).on('resize.two', resize);
 
         this.divs.select('svg').remove();
 
