@@ -8,9 +8,8 @@ declare let d3;
 
 export class BarChartDirective implements OnChanges {
 
-    // data input for my bar chart
-    @Input('barChartData')
-    barChartData;
+    // Input and Output variables
+    @Input() barChartData;
     @Input() title;
     @Output() hovering = new EventEmitter();
 
@@ -18,12 +17,21 @@ export class BarChartDirective implements OnChanges {
 
     render(barChartData: any, title: any) {
 
+        // Resize a function
+        let resize = d => {
+            this.divs.select('svg').remove();
+            console.log('hello1');
+            this.render(this.barChartData, this.title);
 
-        d3.select('.myBarChartGraph').remove();
+        };
 
-        let testData = barChartData;
+        d3.select(window).on('resize', resize);
 
-        // create window for your chart;
+
+        // Cleanup current svg
+        this.divs.select('svg').remove();
+
+        // Create window for your chart;
         let margin = {top: 60, right: 60, bottom: 60, left: 30},
             width = document.getElementById('graphArea').clientWidth - margin.right - margin.left,
             height = 400 - margin.top - margin.bottom;
@@ -35,14 +43,14 @@ export class BarChartDirective implements OnChanges {
             .append('g')
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')');
 
-        // scales
+        // Scales
         let x = d3.scale.ordinal()
             .rangeRoundBands([margin.left, width - margin.right], 0.1, .3);
 
         let y = d3.scale.linear()
             .range([height - margin.bottom, margin.top]);
 
-        // axes
+        // Axes
         let xAxis = d3.svg.axis()
             .scale(x)
             .orient('bottom')
@@ -52,33 +60,29 @@ export class BarChartDirective implements OnChanges {
             .scale(y)
             .orient('left');
 
-
+        // Axis data
         let axisData = [
             {axis: xAxis, dx: 0, dy: (height - margin.bottom), clazz: 'x'},
             {axis: yAxis, dx: margin.left, dy: 0, clazz: 'y'}
         ];
 
-
+        // Re-assign input variable
         let hover = this.hovering;
 
         // standard graph drawing function
         function redraw(data, _hover) {
 
-
-            // fill in here
-
-            console.log(data);
-
+            // Push al data into a list for calculating the upper-bound value
             let total_list = [];
             for (let d of data) {
                 total_list.push(d._value);
             }
 
-            // let field_goal_attempts_max = d3.max(field_goal_attempts_list);
-
+            // Setting the domain
             x.domain(data.map((d, i) => d.date));
             y.domain([0, d3.max(total_list)]);
 
+            // Creating bars
             let bars = svg.selectAll('rect.bar')
                 .data(data);
 
@@ -93,7 +97,7 @@ export class BarChartDirective implements OnChanges {
                 .attr('height', 0)
                 .transition()
                 .delay((d, i) => i * 0)
-                .duration(800)
+                .duration(400)
                 .attr('y', (d) => y(d._value))
                 .attr('height', (d) => y(0) - y(d._value));
 
@@ -104,7 +108,7 @@ export class BarChartDirective implements OnChanges {
 
                 });
 
-            // EXPERIMENTAL CREATE CIRCLE
+            // Creating circles
             let circles = svg.selectAll('circle.bar')
                 .data(data);
 
@@ -116,14 +120,13 @@ export class BarChartDirective implements OnChanges {
                 .attr('cy', y(0))
                 .transition()
                 .delay((d, i) => i * 50)
-                .duration(800)
+                .duration(400)
                 .attr('r', '3')
                 .attr('cx', d => x(d.date) + x.rangeBand() / 2)
                 .attr('cy', d => y(d._value))
                 .style('fill', 'steelblue');
 
-            // EXPERIMENTAL PATH
-
+            // Creating a line
             let line = d3.svg.line()
                 .interpolate('cardinal')
                 .x(d => x(d.date) + x.rangeBand() / 2)
@@ -135,21 +138,19 @@ export class BarChartDirective implements OnChanges {
                 .attr('class', 'line')
                 .attr('d', line);
 
+            // Animate the line
             let totalLength = path.node().getTotalLength();
 
             path
                 .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
                 .attr('stroke-dashoffset', totalLength)
                 .transition()
-                .delay(500)
-                .duration(2000)
+                .delay(300)
+                .duration(800)
                 .ease('linear')
                 .attr('stroke-dashoffset', 0);
 
-
-            // let lines = svg.selectAll('lines.bar').data(data)
-
-
+            // Create axis
             let axis = svg.selectAll('g.axis')
                 .data(axisData);
 
@@ -163,8 +164,7 @@ export class BarChartDirective implements OnChanges {
                     .call(d.axis);
             });
 
-            // rotate x-axis
-
+            // Rotate text label x-axis
             svg.selectAll('.x text')
             // .attr('dy', '.35em')
                 .attr('transform', 'translate(-60,60)scale(0.9)rotate(-45)')
@@ -172,7 +172,7 @@ export class BarChartDirective implements OnChanges {
         }
 
 
-        // Append textual things
+        // Append textual items
         svg.append('text')
             .attr('x', (width / 3))
             .attr('y', 0 - (margin.top / 3))
@@ -188,19 +188,20 @@ export class BarChartDirective implements OnChanges {
             .style('font-weight', 'bold');
 
         svg.append('text')
-            .attr('text-anchor', 'start')
-            .attr('transform', `translate(${'40'},${height / 2})rotate(-90)`)
+            .attr('text-anchor', 'end')
+            .attr('transform', `translate(${'40'},${margin.top})rotate(-90)`)
             .text('users')
             .style('font-weight', 'bold');
 
 
-        redraw(testData, hover);
+        redraw(barChartData, hover);
 
 
     }
 
     constructor(elementRef: ElementRef) {
 
+        // Select a DOM element
         let el: any = elementRef.nativeElement;
 
         this.divs = d3.select(el);
@@ -210,7 +211,7 @@ export class BarChartDirective implements OnChanges {
 
     ngOnChanges() {
 
-        // only render when barChartData exists
+        // Only render when barChartData exists
         if (this.barChartData) {
             this.render(this.barChartData, this.title);
         }
