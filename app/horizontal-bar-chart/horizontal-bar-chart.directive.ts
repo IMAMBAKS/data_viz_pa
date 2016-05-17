@@ -154,7 +154,7 @@ export class HorizontalBarChartDirective implements OnChanges {
 
     ngOnChanges(changes) {
 
-        console.log(changes)
+        console.log(changes);
 
         // only render when barChartData exists
         if (this.barChartData) {
