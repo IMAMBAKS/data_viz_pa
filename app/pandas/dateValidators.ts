@@ -20,6 +20,16 @@ export class DateValidators {
 
 
     }
+    static mustBeAValidDateOrEmpty(control: Control) {
+
+        if (/^(((201([3-7]))(-(0?[1-9]|1[0-2]))?(-(0?[1-9]|1[1-9]|2[1-9]|30))?)|)$/.test(control.value)) {
+            return null;
+        }
+
+        return {mustBeAValidDate: true};
+
+
+    }
 
 
 }
