@@ -26,7 +26,7 @@ export class DateValidators {
             return null;
         }
 
-        return {mustBeAValidDate: true};
+        return {mustBeAValidDateOrEmpty: true};
 
 
     }

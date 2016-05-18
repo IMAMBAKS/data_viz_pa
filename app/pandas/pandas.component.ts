@@ -33,7 +33,8 @@ export class PandasComponent {
                 Validators.required,
                 DateValidators.cannotContainSpace,
                 DateValidators.mustBeAValidDate])],
-            second_date: ['', Validators.compose([DateValidators.mustBeAValidDateOrEmpty])]
+            second_date: ['', Validators.compose([
+                DateValidators.mustBeAValidDateOrEmpty])]
         });
 
         this.choice = {
@@ -71,7 +72,7 @@ export class PandasComponent {
 
                     data_transformed_array.push({
                         _value: data[key].length,
-                        date: new Date(+ key),
+                        date: new Date(+key),
                         names: (data[key])
                     });
                 }

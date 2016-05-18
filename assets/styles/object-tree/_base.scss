@@ -74,3 +74,22 @@
   stroke: steelblue;
   stroke-width: 1.5px;
 }
+
+
+.filtersubmit {
+  position: absolute;
+  z-index: 1;
+  right: 40px;
+  top: 1px;
+  color: #c8c8c8;
+  width: 0;
+}
+
+.validforminput {
+  position: absolute;
+  z-index: 1;
+  right: 40px;
+  top: 1px;
+  color: #2397f3;
+  width: 0;
+}
