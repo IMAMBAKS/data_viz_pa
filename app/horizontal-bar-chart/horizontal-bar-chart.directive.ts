@@ -17,13 +17,13 @@ export class HorizontalBarChartDirective implements OnChanges {
         this.render(this.barChartData, this.title, this.xAxis);
     };
 
-    render(barChartData: any, title: any, xAxisLabel?: any) {
 
+    render(barChartData: any, title: any, xAxisLabel?: any) {
 
         this.divs.select('svg').remove();
 
         // create window for your chart;
-        let margin = {top: 40, right: 60, bottom: 40, left: 150},
+        let margin = {top: 40, right: 60, bottom: 40, left: 100},
             width = document.getElementById('graphArea2').clientWidth - margin.right - margin.left,
             height = 500 - margin.top - margin.bottom;
 
@@ -62,18 +62,18 @@ export class HorizontalBarChartDirective implements OnChanges {
 
             let total_list = [];
             for (let d of data) {
-                total_list.push(+ d.value);
+                total_list.push(+d.value);
             }
             y.domain(data.map((d, i) => d.workspace));
             x.domain([0, d3.max(total_list)]);
 
 
-            let bars = svg.selectAll('rect.bar')
+            let bars = svg.selectAll('rect.barh')
                 .data(data);
 
             bars.enter()
                 .append('rect')
-                .classed('bar', true);
+                .classed('barh', true);
 
             bars
                 .attr('y', (d, i) => y(d.workspace))
@@ -84,12 +84,12 @@ export class HorizontalBarChartDirective implements OnChanges {
                 .delay((d, i) => i * 50)
                 .duration(800)
                 .attr('width', (d) => {
-                    return x(+ d.value);
+                    return x(+d.value);
                 })
                 .style('fill', '#D3D3D3');
 
             // EXPERIMENTAL CREATE CIRCLE
-            let textValues = svg.selectAll('text.bar')
+            let textValues = svg.selectAll('text.barh')
                 .data(data);
 
             textValues.enter().append('text')
@@ -149,7 +149,6 @@ export class HorizontalBarChartDirective implements OnChanges {
 
     ngOnChanges(changes) {
 
-        console.log(changes);
 
         // only render when barChartData exists
         if (this.barChartData) {
