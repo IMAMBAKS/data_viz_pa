@@ -53,14 +53,12 @@
 
                             />
 
-                            <div *ngIf="!second_date.touched">
+                            <div>
 
                                 <i class="fa fa-calendar-o fa-2x filtersubmit"></i>
                             </div>
 
 
-                            <div *ngIf="second_date.touched && !second_date.errors"><i
-                                    class="fa fa-check-square fa-2x validforminput"></i></div>
                             <div *ngIf="second_date.touched && second_date.errors">
                                 <div *ngIf="second_date.errors.mustBeAValidDateOrEmpty"
                                      class="text-danger">Specified date not valid
@@ -129,10 +127,10 @@
                     <div id="graphArea" class="panel-body">
                         <i class="fa fa-line-chart fa-2x"></i>
 
-                        <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
-                                    (hovering)="readBarData($event)">
+                        <!--<myBarChart [barChartData]='timeData' [title]="'Active users in time'"-->
+                                    <!--(hovering)="readBarData($event)">-->
 
-                        </myBarChart>
+                        <!--</myBarChart>-->
 
 
                     </div>
@@ -170,7 +168,7 @@
                                 <i class="fa fa-clone fa-2x"></i>
 
                                 <myHorizontalBarChart [barChartData]='hdata' [title]="'Most active workspaces'"
-                                                      [xAxis]="'Active users'">
+                                                      [xAxisLabel]="'Active users'">
 
                                 </myHorizontalBarChart>
 
@@ -193,7 +191,7 @@
 
 
                                 <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'"
-                                                      [xAxis]="'Workspace entries'">
+                                                      [xAxisLabel]="'Workspace entries'">
 
                                 </myHorizontalBarChart>
 
