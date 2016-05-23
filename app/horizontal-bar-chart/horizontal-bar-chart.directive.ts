@@ -95,28 +95,19 @@ export class HorizontalBarChartDirective implements OnChanges {
             .append('g')
             .attr('transform', `translate(${this.margin.left},${this.margin.top} )`);
 
-        // Build standard text fields
-        this.svg.append('text')
-            .attr('x', (this.width / 3))
-            .attr('y', 0 - (this.margin.top / 3))
-            .attr('text-anchor', 'start')
-            .text(this.title)
-            .classed('chart-title', true);
 
-        this.svg.append('text')
-            .attr('x', (this.width / 2))
-            .attr('y', this.height + this.margin.bottom / 2)
-            .attr('text-anchor', 'end')
-            .text(this.xAxisLabel)
-            .style('font-weight', 'bold');
     }
 
     private redraw(): void {
 
+        // Redefine the with
+        this.width = document.getElementById('graphArea2').clientWidth - this.margin.right - this.margin.left;
+
+
         // Transform the data
         let total_list = [];
         for (let d of this.barChartData) {
-            total_list.push(+d.value);
+            total_list.push(+ d.value);
         }
         this.yScale.domain(this.barChartData.map((d, i) => d.workspace));
         this.xScale.domain([0, d3.max(total_list)]);
@@ -137,7 +128,7 @@ export class HorizontalBarChartDirective implements OnChanges {
             .attr('height', this.yScale.rangeBand())
             .attr('x', this.margin.left)
             .attr('width', (d) => {
-                return this.xScale(+d.value);
+                return this.xScale(+ d.value);
             })
             .style('fill', '#D3D3D3');
 
@@ -154,22 +145,29 @@ export class HorizontalBarChartDirective implements OnChanges {
             .delay((d, i) => i * 50)
             .duration(800)
             .attr('width', (d) => {
-                return this.xScale(+d.value);
+                return this.xScale(+ d.value);
             });
 
         // Remove current text values
-        this.svg.selectAll('text.barh').remove()
+        this.svg.selectAll('text.barh').remove();
 
         // Push text values onto the chart
         let textValues = this.svg.selectAll('text.barh')
             .data(this.barChartData);
 
+
         textValues.enter().append('text')
             .attr('x', d => this.xScale(d.value) + this.margin.left * 0.85)
             .attr('text-anchor', 'middle')
+            .style('fill', 'white')
             .attr('y', d => this.yScale(d.workspace) + this.yScale.rangeBand() / 2)
             .text(d => d.value)
-            .style('fill', 'white');
+            .classed('barh', 'true')
+            .style('opacity', '0')
+            .transition()
+            .delay(800)
+            .style('opacity', '1');
+
 
         // Create Axes into the chart
         let axis = this.svg.selectAll('g.axis')
@@ -184,6 +182,26 @@ export class HorizontalBarChartDirective implements OnChanges {
                 .classed(d.clazz, true)
                 .call(d.axis);
         });
+
+        // Remove standard text fields
+        this.svg.select('.legendArea').remove();
+
+        let legendArea = this.svg.append('g').classed('legendArea', true);
+
+        // Build standard text fields
+        legendArea.append('text')
+            .attr('x', (this.width / 3))
+            .attr('y', 0 - (this.margin.top / 3))
+            .attr('text-anchor', 'start')
+            .text(this.title)
+            .classed('chart-title', true);
+
+        legendArea.append('text')
+            .attr('x', (this.width / 2))
+            .attr('y', this.height + this.margin.bottom / 2)
+            .attr('text-anchor', 'end')
+            .text(this.xAxisLabel)
+            .style('font-weight', 'bold');
 
 
     }
