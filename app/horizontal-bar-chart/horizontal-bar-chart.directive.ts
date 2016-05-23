@@ -157,14 +157,12 @@ export class HorizontalBarChartDirective implements OnChanges {
                 return this.xScale(+d.value);
             });
 
-
+        // Remove current text values
+        this.svg.selectAll('text.barh').remove()
 
         // Push text values onto the chart
         let textValues = this.svg.selectAll('text.barh')
             .data(this.barChartData);
-
-        // Remove current text values
-        textValues.exit().remove();
 
         textValues.enter().append('text')
             .attr('x', d => this.xScale(d.value) + this.margin.left * 0.85)
