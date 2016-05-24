@@ -21,12 +21,10 @@
                                    ngControl="first_date"
                                    #first_date="ngForm"
                             />
-                            <div *ngIf="!first_date.touched">
+                            <div>
 
                                 <i class="fa fa-calendar-o fa-2x filtersubmit"></i>
                             </div>
-                            <div *ngIf="first_date.touched && !first_date.errors"><i
-                                    class="fa fa-check-square fa-2x validforminput"></i></div>
 
 
                             <div *ngIf="first_date.touched && first_date.errors">
@@ -73,6 +71,15 @@
                     <div class="form-group">
                         <label class="col-lg-6 control-label">Aggregate by:</label>
                         <div class="col-lg-offset-2 col-lg-8">
+                            <div class="radio">
+                                <label>
+                                    <input type="radio" name="optionsRadios" id="optionHour" value="H"
+                                           #hour [checked]="choice.freq == hour.value"
+                                           (click)="choice.freq = hour.value"
+                                    >
+                                    Hours(s)
+                                </label>
+                            </div>
                             <div class="radio">
                                 <label>
                                     <input type="radio" name="optionsRadios" id="optionDay" value="D"
@@ -143,6 +150,7 @@
 
                     <div class="col-md-12">
                         <div><strong>Totaal aantal gebruikers:</strong> {{barData._value}}</div>
+                        <div><strong>Tijd:</strong> {{barData.date | date:'dd/M/yy H:m'}}</div>
                         <div><strong>Namen:</strong>
 
             <span *ngFor="let user of barData.names">
