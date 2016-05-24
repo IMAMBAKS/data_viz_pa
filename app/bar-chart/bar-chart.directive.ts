@@ -90,9 +90,20 @@ export class BarChartDirective implements OnChanges {
     }
 
     buildSVG(): void {
+
+        // Build the SVG container
+        this.svg = this.host.append('svg')
+            .attr('width', this.width + this.margin.right + this.margin.left)
+            .attr('height', this.height + this.margin.top + this.margin.bottom)
+            .attr('class', 'myHorizontalBarChartGraph')
+            .append('g')
+            .attr('transform', `translate(${this.margin.left},${this.margin.top} )`);
+
     }
 
     redraw(): void {
+
+
     }
 
     // render(barChartData: any, title: any) {
