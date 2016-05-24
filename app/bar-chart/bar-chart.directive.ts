@@ -1,4 +1,13 @@
-import {Directive, ElementRef, Input, Output, OnChanges, EventEmitter, HostListener} from '@angular/core';
+import {
+    Directive,
+    ElementRef,
+    Input,
+    Output,
+    OnChanges,
+    EventEmitter,
+    HostListener,
+    AfterContentInit
+} from '@angular/core';
 
 declare let d3;
 
@@ -6,7 +15,8 @@ declare let d3;
     selector: 'myBarChart'
 })
 
-export class BarChartDirective implements OnChanges {
+export class BarChartDirective implements OnChanges, AfterContentInit {
+
 
     // Input and Output variables
     @Input() barChartData;
@@ -25,7 +35,12 @@ export class BarChartDirective implements OnChanges {
     private axisConfig; // Configuration for both axes
 
     @HostListener('window:resize', ['$event.target']) onClick() {
-        // this.render(this.barChartData, this.title);
+        d3.select(this.svg).remove();
+        this.setup();
+        this.buildSVG();
+        this.redraw();
+
+
     };
 
     constructor(elementRef: ElementRef) {
@@ -34,9 +49,13 @@ export class BarChartDirective implements OnChanges {
         let htmlElement: any = elementRef.nativeElement;
         this.host = d3.select(htmlElement);
 
+
+    }
+
+    ngAfterContentInit(): any {
+        d3.select(this.svg).remove();
         this.setup();
         this.buildSVG();
-
     }
 
 
@@ -44,7 +63,7 @@ export class BarChartDirective implements OnChanges {
 
         // Only render when barChartData exists
         if (this.barChartData) {
-            // this.render(this.barChartData, this.title);
+            this.redraw();
         }
 
 
@@ -56,13 +75,6 @@ export class BarChartDirective implements OnChanges {
         this.margin = {top: 60, right: 60, bottom: 60, left: 30};
         this.width = document.getElementById('graphArea').clientWidth - this.margin.right - this.margin.left;
         this.height = 400 - this.margin.top - this.margin.bottom;
-
-        this.svg = this.host.append('svg')
-            .attr('width', this.width + this.margin.right + this.margin.left)
-            .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .attr('class', 'myBarChartGraph')
-            .append('g')
-            .attr('transform', `translate(${this.margin.left},${this.margin.top} )`);
 
         // Scales
         this.xScale = d3.scale.ordinal()
@@ -95,13 +107,163 @@ export class BarChartDirective implements OnChanges {
         this.svg = this.host.append('svg')
             .attr('width', this.width + this.margin.right + this.margin.left)
             .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .attr('class', 'myHorizontalBarChartGraph')
+            .attr('class', 'myBarChartGraph')
             .append('g')
             .attr('transform', `translate(${this.margin.left},${this.margin.top} )`);
 
     }
 
     redraw(): void {
+
+        // Push al data into a list for calculating the upper-bound value
+        let total_list = [];
+        for (let d of this.barChartData) {
+            total_list.push(d._value);
+        }
+
+        // Setting the domain
+        this.xScale.domain(this.barChartData.map((d, i) => d.date));
+        this.yScale.domain([0, d3.max(total_list)]);
+
+
+        // Bars
+        let bars = this.svg.selectAll('rect.bar')
+            .data(this.barChartData, d => d.date);
+
+
+        // Remove existing not in current data bars
+        bars.exit().style('opacity', '0.3').style('fill', 'tomato').transition().duration(800).attr('height', 0).attr('y', this.yScale(0)).remove();
+
+        // Update current bars
+        bars.transition().duration(1000)
+            .attr('x', (d, i) => this.xScale(d.date))
+            .attr('width', this.xScale.rangeBand())
+            .attr('y', (d) => this.yScale(d._value))
+            .attr('height', (d) => this.yScale(0) - this.yScale(d._value));
+
+
+        // Create new bars
+        bars.enter()
+            .append('rect')
+            .classed('bar', true)
+            .attr('x', (d, i) => this.xScale(d.date))
+            .attr('width', this.xScale.rangeBand())
+            .attr('y', this.yScale(0))
+            .attr('height', 0)
+            .transition()
+            .delay((d, i) => i * 10)
+            .duration(300)
+            .attr('y', (d) => this.yScale(d._value))
+            .attr('height', (d) => this.yScale(0) - this.yScale(d._value));
+
+
+        bars
+            .on('mouseover', (d) => {
+
+                this.hovering.emit({newValue: d});
+
+            });
+
+
+        let circles = this.svg.selectAll('circle.bar')
+            .data(this.barChartData, d => d.date);
+
+        // Remove circles
+        circles.exit().style('opacity', '0.5').style('fill', 'red').transition().delay(2000).duration(500).ease('bounce').attr('cy', this.yScale(0)).remove();
+
+        // Update circles
+        circles.transition().duration(600).attr('cx', d => this.xScale(d.date) + this.xScale.rangeBand() / 2)
+            .attr('cy', d => this.yScale(d._value));
+
+
+        // Creating circles
+        circles.enter().append('circle')
+            .classed('bar', true)
+            .attr('r', '0')
+            .attr('cx', d => this.xScale(d.date) + this.xScale.rangeBand() / 2)
+            .attr('cy', this.yScale(0))
+            .transition()
+            .duration(1000)
+            .attr('r', '3')
+            .attr('cx', d => this.xScale(d.date) + this.xScale.rangeBand() / 2)
+            .attr('cy', d => this.yScale(d._value))
+            .style('fill', 'steelblue');
+
+        // Creating a line
+        let line = d3.svg.line()
+            .interpolate('cardinal')
+            .x(d => this.xScale(d.date) + this.xScale.rangeBand() / 2)
+            .y(d => this.yScale(d._value));
+
+        // Remove current lint
+        d3.select('path.line').remove();
+
+        let path = this.svg.append('path')
+            .datum(this.barChartData)
+            .attr('class', 'line')
+            .attr('d', line);
+
+
+        // Animate the line
+        let totalLength = path.node().getTotalLength();
+
+
+        path
+            .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+            .attr('stroke-dashoffset', totalLength)
+            .transition()
+            .delay(300)
+            .duration(800)
+            .ease('linear')
+            .attr('stroke-dashoffset', 0);
+
+        // Create axis
+        let axis = this.svg.selectAll('g.axis')
+            .data(this.axisConfig);
+
+        axis.enter().append('g')
+            .classed('axis', true);
+
+        axis.transition().duration(1000).each(function (d) {
+            d3.select(this)
+                .attr('transform', 'translate(' + d.dx + ',' + d.dy + ')')
+                .classed(d.clazz, true)
+                .call(d.axis);
+        });
+
+        // Rotate text label x-axis
+        this.svg.selectAll('.x text')
+        // .attr('dy', '.35em')
+            .attr('transform', 'translate(-60,60)scale(0.9)rotate(-45)')
+            .style('text-anchor', 'start');
+
+
+        // Append textual items
+
+        // Remove standard text fields
+        this.svg.select('.legendArea').remove();
+
+        let legendArea = this.svg.append('g').classed('legendArea', true);
+
+        legendArea.append('text')
+            .attr('x', (this.width / 3))
+            .attr('y', 0 - (this.margin.top / 3))
+            .attr('text-anchor', 'start')
+            .text(this.title)
+            .classed('chart-title', true);
+
+        legendArea.append('text')
+            .attr('x', (this.width / 2))
+            .attr('y', this.height + this.margin.bottom / 2)
+            .attr('text-anchor', 'end')
+            .text('time')
+            .style('font-weight', 'bold');
+
+        legendArea.append('text')
+            .attr('text-anchor', 'end')
+            .attr('transform', `translate(${'40'},${this.margin.top})rotate(-90)`)
+            .text('users')
+            .style('font-weight', 'bold');
 
 
     }
