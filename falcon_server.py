@@ -17,12 +17,8 @@ def workspace_activity_in_time(parameter, *args, freq: str = 'W') -> pd.DataFram
 	else:
 		df2 = df[parameter]
 
-	name = df2.groupby([pd.Grouper(freq=freq),'workspace_name'])['user_name'].nunique()
+	name = df2.groupby([pd.Grouper(freq='M'),'workspace_name']).apply(lambda x: x.user_name.nunique() if x.user_name.nunique() > 2 else None).dropna(axis=0)
 	return name
-
-# groups.apply(lambda x: x.user_name.nunique() if x.user_name.nunique() > 2 else None).dropna(axis=0)
-# test
-
 
 
 def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
