@@ -19,6 +19,9 @@ def workspace_activity_in_time(parameter, *args, freq: str = 'W') -> pd.DataFram
 
 	name = df2.groupby([pd.Grouper(freq='M'), 'workspace_name']).apply(
 		lambda x: x.user_name.nunique() if x.user_name.nunique() > 5 else None).dropna(axis=0)
+
+	print(name.rename({0: "test"}))
+	name = name.rename("value")
 	return name
 
 
@@ -27,7 +30,6 @@ def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
 		df2 = df[parameter:args[0]]
 	else:
 		df2 = df[parameter]
-
 
 	name = df2.groupby(pd.Grouper(freq=freq))['user_name'].unique()
 	return name
@@ -88,17 +90,18 @@ class WorkSpaceActivityResource:
 			date2 = req.get_param('date2')
 
 			try:
-				query = workspace_activity_in_time(date1, date2, freq=freq).reset_index().to_json(date_format='epoch', orient='records')
+				query = workspace_activity_in_time(date1, date2, freq=freq).reset_index().to_json(date_format='epoch',
+				                                                                                  orient='records')
 			except:
 				query = ''
 		else:
 
 			try:
-				query = workspace_activity_in_time(date1, freq=freq).reset_index().to_json(date_format='epoch', orient='records')
+				query = workspace_activity_in_time(date1, freq=freq).reset_index().to_json(date_format='epoch',
+				                                                                           orient='records')
 			except:
 				query = ''
 
-		print(query)
 		resp.body = query
 
 
