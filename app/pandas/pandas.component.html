@@ -125,6 +125,16 @@
             <div class="container-fluid">
 
                 <div class="row">
+                    <div class="col-md-6">
+                        <div><strong>Total active users:</strong> {{barData._value}}</div>
+                        <div><strong>Time:</strong> {{barData.date | date:'medium'}}</div>
+
+                    </div>
+
+
+                </div>
+
+                <div class="row">
 
 
                 </div>
@@ -133,6 +143,7 @@
 
                     <div id="graphArea" class="panel-body">
                         <i class="fa fa-line-chart fa-2x"></i>
+
 
                         <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
                                     (hovering)="readBarData($event)">
@@ -149,24 +160,6 @@
                 <div class="row">
 
                     <div class="col-md-12">
-                        <div><strong>Totaal aantal gebruikers:</strong> {{barData._value}}</div>
-                        <div><strong>Tijd:</strong> {{barData.date | date:'dd/M/yy H:m'}}</div>
-                        <div><strong>Namen:</strong>
-
-            <span *ngFor="let user of barData.names">
-                {{user}},
-            </span>
-
-                        </div>
-                    </div>
-
-
-                </div>
-
-
-                <div class="row">
-
-                    <div class="col-md-6">
 
                         <div class="panel panel-default">
 
@@ -188,29 +181,7 @@
 
 
                     </div>
-                    <div class="col-md-6">
 
-                        <div class="panel panel-default">
-
-
-                            <div id="graphArea3" class="panel-body">
-
-                                <i class="fa fa-user fa-2x"></i>
-
-
-                                <myHorizontalBarChart [barChartData]='userData' [title]="'Most active users'"
-                                                      [xAxisLabel]="'Workspace entries'">
-
-                                </myHorizontalBarChart>
-
-
-                            </div>
-
-
-                        </div>
-
-
-                    </div>
 
 
                 </div>

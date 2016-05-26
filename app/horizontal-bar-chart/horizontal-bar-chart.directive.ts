@@ -61,7 +61,7 @@ export class HorizontalBarChartDirective implements OnChanges, AfterContentInit 
     private setup(): void {
 
         // Geometry configuration
-        this.margin = {top: 40, right: 60, bottom: 40, left: 100};
+        this.margin = {top: 40, right: 60, bottom: 40, left: 140};
         this.width = document.getElementById('graphArea2').clientWidth - this.margin.right - this.margin.left;
         this.height = 500 - this.margin.top - this.margin.bottom;
 

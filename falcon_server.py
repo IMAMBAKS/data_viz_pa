@@ -17,7 +17,8 @@ def workspace_activity_in_time(parameter, *args, freq: str = 'W') -> pd.DataFram
 	else:
 		df2 = df[parameter]
 
-	name = df2.groupby([pd.Grouper(freq='M'),'workspace_name']).apply(lambda x: x.user_name.nunique() if x.user_name.nunique() > 2 else None).dropna(axis=0)
+	name = df2.groupby([pd.Grouper(freq='M'), 'workspace_name']).apply(
+		lambda x: x.user_name.nunique() if x.user_name.nunique() > 5 else None).dropna(axis=0)
 	return name
 
 
@@ -26,6 +27,7 @@ def get_year(parameter, *args, freq: str = 'W') -> pd.DataFrame:
 		df2 = df[parameter:args[0]]
 	else:
 		df2 = df[parameter]
+
 
 	name = df2.groupby(pd.Grouper(freq=freq))['user_name'].unique()
 	return name
@@ -76,6 +78,30 @@ class UserActivity:
 		resp.body = query
 
 
+class WorkSpaceActivityResource:
+	def on_get(self, req, resp):
+
+		date1 = req.get_param('date1')
+		freq = req.get_param('freq')
+
+		if req.get_param('date2') is not None:
+			date2 = req.get_param('date2')
+
+			try:
+				query = workspace_activity_in_time(date1, date2, freq=freq).reset_index().to_json(date_format='epoch', orient='records')
+			except:
+				query = ''
+		else:
+
+			try:
+				query = workspace_activity_in_time(date1, freq=freq).reset_index().to_json(date_format='epoch', orient='records')
+			except:
+				query = ''
+
+		print(query)
+		resp.body = query
+
+
 class WorkspaceResource:
 	def on_get(self, req, resp):
 		date1 = req.get_param('date1')
@@ -121,6 +147,7 @@ class UsersResource:
 api = falcon.API(middleware=[cors.middleware])
 api.add_route('/activity', UserActivity())
 api.add_route('/workspaces', WorkspaceResource())
+api.add_route('/activity_workspaces', WorkSpaceActivityResource())
 api.add_route('/users', UsersResource())
 
 serve(api, host='127.0.0.1', port=80)
