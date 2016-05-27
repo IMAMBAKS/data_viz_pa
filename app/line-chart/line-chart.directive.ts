@@ -16,8 +16,6 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     // Input and Output variables
     @Input() lineChartData;
-    @Input() dateOne;
-    @Input() dateTwo;
 
     // Private variables
     private host: any; // d3 element referencing host object
