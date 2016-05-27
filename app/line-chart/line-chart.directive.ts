@@ -16,6 +16,8 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     // Input and Output variables
     @Input() lineChartData;
+    @Input() dateOne;
+    @Input() dateTwo;
 
     // Private variables
     private host: any; // d3 element referencing host object
@@ -107,8 +109,8 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
     private redraw(): void {
 
         // Setting Axes domain
-        let timeFormat2 = d3.time.format('%Y-%m-%d');
-        this.xScale.domain([timeFormat2.parse('2013-03-01'), timeFormat2.parse('2016-04-01')]);
+        // let timeFormat2 = d3.time.format('%Y-%m-%d');
+        this.xScale.domain();
         this.yScale.domain([0, 241]);
 
         let pointLine = d3.svg.line()
