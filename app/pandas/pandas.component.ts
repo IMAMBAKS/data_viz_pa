@@ -4,11 +4,13 @@ import {PostService} from './post.service';
 import {ControlGroup, FormBuilder, Validators} from '@angular/common';
 import {DateValidators} from './dateValidators';
 import {HorizontalBarChartDirective} from '../horizontal-bar-chart/horizontal-bar-chart.directive';
+import {LineChartDirective} from '../line-chart/line-chart.directive';
+declare let d3;
 
 @Component({
     selector: 'pandas',
     templateUrl: 'app/pandas/pandas.component.html',
-    directives: [BarChartDirective, HorizontalBarChartDirective],
+    directives: [BarChartDirective, HorizontalBarChartDirective, LineChartDirective],
     providers: [PostService]
 })
 
@@ -21,6 +23,7 @@ export class PandasComponent {
     hdata;
     barData;
     userData;
+    workspaceTimeData;
 
     // Define a form variable
     form: ControlGroup;
@@ -81,6 +84,27 @@ export class PandasComponent {
 
             this.timeData = data_transformed_array;
         });
+
+
+        // Get workspace activity lines data
+        this._postService.getWorkspaceActivityData(date1, date2, frequency).subscribe(
+            data => {
+
+
+                data.forEach(function (d) {
+                    d.date = new Date(+d.date);
+                });
+
+                let nested_data = d3.nest()
+                    .key(d => d.workspace_name)
+                    .entries(data);
+
+                this.workspaceTimeData = nested_data;
+
+
+            }
+        );
+
 
         // Get top 10 workspaces data
         this._postService.getTopTenWorkspaces(date1, date2).subscribe(data => {

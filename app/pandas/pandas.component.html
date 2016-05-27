@@ -126,6 +126,10 @@
 
                 <div class="row">
                     <div class="col-md-6">
+                        <!--{{workspaceTimeData | json}}-->
+
+                        <myLineChart [lineChartData]="workspaceTimeData"></myLineChart>
+
                         <div><strong>Total active users:</strong> {{barData._value}}</div>
                         <div><strong>Time</strong> {{barData.date | date:'medium'}}</div>
 
@@ -181,7 +185,6 @@
 
 
                     </div>
-
 
 
                 </div>

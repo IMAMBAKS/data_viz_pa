@@ -51,7 +51,7 @@ export class HorizontalBarChartDirective implements OnChanges, AfterContentInit 
     // Onchanges redraw the chart
     ngOnChanges(changes) {
 
-        // Only render when barChartData exists
+        // Only render when lineChartData exists
         if (this.barChartData) {
             this.redraw();
         }

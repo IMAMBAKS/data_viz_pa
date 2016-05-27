@@ -1,7 +1,7 @@
 /**
  * Created by rimambaks on 5/25/2016.
  */
-import {Directive, Input, OnChanges, AfterContentInit} from '@angular/core';
+import {Directive, Input, OnChanges, AfterContentInit, ElementRef} from '@angular/core';
 
 declare let d3;
 
@@ -15,7 +15,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
 
     // Input and Output variables
-    @Input() barChartData;
+    @Input() lineChartData;
 
     // Private variables
     private host: any; // d3 element referencing host object
@@ -28,34 +28,42 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
     private xAxis; // Component X Axis
     private yAxis; // Component Y Axis
     private axisConfig; // Configuration for both axes
-    private line; // Create line definition
+    // private line; // Create line definition
 
-    constructor() {
-        console.log('Hello Ive been constructed');
+    constructor(elementRef: ElementRef) {
+        // Select a DOM element
+        let htmlElement: any = elementRef.nativeElement;
+        this.host = d3.select(htmlElement);
     };
 
 
     ngAfterContentInit(): any {
         this.setup();
         this.buildSVG();
-        this.redraw();
+
     }
 
 
     ngOnChanges(changes: {}): any {
-        this.redraw();
+        // Only render when lineChartData exists
+        if (this.lineChartData) {
+            this.redraw();
+        }
     }
 
 
     private setup(): void {
+
+
+
         // Create SVG geometry
         this.margin = {top: 60, right: 60, bottom: 60, left: 30};
-        this.width = 400 - this.margin.right - this.margin.left;
+        this.width = 1200 - this.margin.right - this.margin.left;
         this.height = 400 - this.margin.top - this.margin.bottom;
 
         // Scales
-        this.xScale = d3.scale.ordinal()
-            .rangeRoundBands([this.margin.left, this.width - this.margin.right], 0.1, .3);
+        this.xScale = d3.time.scale()
+            .range([this.margin.left, this.width - this.margin.right]);
 
         this.yScale = d3.scale.linear()
             .range([this.height - this.margin.bottom, this.margin.top]);
@@ -76,11 +84,11 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             {axis: this.yAxis, dx: this.margin.left, dy: 0, clazz: 'y'}
         ];
 
-        // Create line definition
-        this.line = d3.svg.line()
-            .interpolate('cardinal')
-            .x(d => this.xScale(d.date) + this.xScale.rangeBand() / 2)
-            .y(d => this.yScale(d._value));
+        // // Create line definition
+        // this.line = d3.svg.line()
+        //     .interpolate('cardinal')
+        //     .x(d => this.xScale(d.values.date) + this.xScale.rangeBand() / 2)
+        //     .y(d => this.yScale(d.values.value));
 
     };
 
@@ -98,30 +106,61 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
+        console.log(this.lineChartData);
+
         // Setting Axes domain
-        this.xScale.domain(this.barChartData.map((d, i) => d.date));
+        let timeFormat2 = d3.time.format('%Y-%m-%d');
+        this.xScale.domain([timeFormat2.parse('2013-03-01'), timeFormat2.parse('2016-04-01')]);
         this.yScale.domain([0, 300]);
 
-        // Bind line to data
-        let path = this.svg.append('path')
-            .datum(this.barChartData)
-            .attr('class', 'line')
-            .attr('d', this.line);
+        let pointLine = d3.svg.line()
+            .x(d => this.xScale(new Date(+d.date)))
+            .y(d => this.yScale(d.value));
 
 
+        // Define lines
+        let lines = this.svg.selectAll('.line-graph')
+            .data(this.lineChartData);
+
+        // Bind the data)
+        lines.enter()
+            .append('g')
+            .attr('class', 'line-graph');
+
+        lines.append('path')
+            .datum(d => d.values)
+            .attr('d', d => {
+                pointLine(d);
+            });
+
+        // Bind axis data to axis
+        let axis = this.svg.selectAll('g.axis')
+            .data(this.axisConfig);
+
+        axis.enter().append('g')
+            .classed('axis', true);
+
+        axis.transition().duration(1000).each(function (d) {
+            d3.select(this)
+                .attr('transform', 'translate(' + d.dx + ',' + d.dy + ')')
+                .classed(d.clazz, true)
+                .call(d.axis);
+        });
+
+
+        //
         // Animate the line
-        let totalLength = path.node().getTotalLength();
-
-
-        path
-            .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
-            .attr('stroke-dashoffset', totalLength)
-            .transition()
-            .delay(300)
-            .duration(800)
-            .ease('linear')
-            .attr('stroke-dashoffset', 0);
-
+        // let totalLength = path.node().getTotalLength();
+        //
+        // path
+        //     .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+        //     .attr('stroke-dashoffset', totalLength)
+        //     .transition()
+        //     .delay(300)
+        //     .duration(800)
+        //     .ease('linear')
+        //     .attr('stroke-dashoffset', 0);
+        //
 
         console.log('should be redrawn');
     };

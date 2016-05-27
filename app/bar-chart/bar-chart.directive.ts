@@ -65,7 +65,7 @@ export class BarChartDirective implements OnChanges, AfterContentInit {
     // Onchanges redraw the chart
     ngOnChanges() {
 
-        // Only render when barChartData exists
+        // Only render when lineChartData exists
         if (this.barChartData) {
             this.redraw();
         }
