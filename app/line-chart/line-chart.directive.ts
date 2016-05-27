@@ -106,15 +106,14 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
-        console.log(this.lineChartData);
-
         // Setting Axes domain
         let timeFormat2 = d3.time.format('%Y-%m-%d');
         this.xScale.domain([timeFormat2.parse('2013-03-01'), timeFormat2.parse('2016-04-01')]);
         this.yScale.domain([0, 241]);
 
         let pointLine = d3.svg.line()
-            .x(d => this.xScale(new Date(+ d.date)))
+            .interpolate('basis')
+            .x(d => this.xScale(new Date(+d.date)))
             .y(d => this.yScale(d.value));
 
 
@@ -141,7 +140,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         axis.enter().append('g')
             .classed('axis', true);
 
-        axis.transition().duration(1000).each(function (d) {
+        axis.transition().duration(300).each(function (d) {
             d3.select(this)
                 .attr('transform', 'translate(' + d.dx + ',' + d.dy + ')')
                 .classed(d.clazz, true)
@@ -151,21 +150,34 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         //
         // Animate the line
-        let totalLength = path.node().getTotalLength();
-
-        path.transition().duration(1).each(function (d) {
-
-            d3.select(this)
-                .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+        for (let i = 0; i < this.lineChartData.length; i++) {
+            let totalLength = path[0][i].getTotalLength();
+            console.log('totalLenght is ', totalLength);
+            d3.select(path[0][i])
+                .attr('stroke-dasharray', totalLength + ' ' + totalLength)
                 .attr('stroke-dashoffset', totalLength)
                 .transition()
-                .delay(300)
-                .duration(800)
+                .duration(10000)
                 .ease('linear')
                 .attr('stroke-dashoffset', 0);
+        }
 
 
-        });
+        console.log(this.lineChartData.length);
+
+        // path.transition().duration(1).each(function (d) {
+        //
+        //     d3.select(this)
+        //         .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
+        //         .attr('stroke-dashoffset', totalLength)
+        //         .transition()
+        //         .delay(300)
+        //         .duration(800)
+        //         .ease('linear')
+        //         .attr('stroke-dashoffset', 0);
+        //
+        //
+        // });
 
 
         console.log('should be redrawn');
