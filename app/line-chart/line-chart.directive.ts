@@ -166,16 +166,21 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             );
 
         // append cicle hhi huhu
-        let circles = this.svg.selectAll('.circle-graph')
-            .data(this.lineChartData);
+        let circles = lines.selectAll('circle')
+            .data(d => d.values);
 
-        circles.enter().append('g').classed('.circle-graph', true);
-
-        circles.append('circle')
-            .data(d => d.values)
-            .attr('cx', d => this.xScale(+d.date))
-            .attr('cy', d => this.yScale(d.value))
+        circles.enter().append('circle')
             .attr('r', '3');
+
+        circles.each((d) => {
+            // let color1 = d3.select(d.parentElement).style('stoke');
+            d3.select(this)
+                .attr('cx', this.xScale(+ d.date))
+                .attr('cy', this.yScale(d.value))
+                .attr('fill', 'red');
+
+
+        });
 
         // Bind axis data to axis
         let axis = this.svg.selectAll('g.axis')
