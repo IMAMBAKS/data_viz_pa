@@ -75,7 +75,7 @@ export class PandasComponent {
 
                     data_transformed_array.push({
                         _value: data[key].length,
-                        date: new Date(+key),
+                        date: new Date(+ key),
                         names: (data[key])
                     });
                 }
@@ -92,13 +92,12 @@ export class PandasComponent {
 
 
                 data.forEach(function (d) {
-                    d.date = new Date(+d.date);
+                    d.date = new Date(+ d.date);
                 });
 
                 let nested_data = d3.nest()
                     .key(d => d.workspace_name)
                     .entries(data);
-
                 this.workspaceTimeData = nested_data;
 
 

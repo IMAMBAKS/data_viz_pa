@@ -106,14 +106,35 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
+        let minDateValue = (d3.min(this.lineChartData, function (d) {
+            // return d.values;
+            return d3.min(d.values, function (z) {
+                return z.date;
+            });
+        }));
+
+        let maxDataValue = (d3.max(this.lineChartData, function (d) {
+            // return d.values;
+            return d3.max(d.values, function (z) {
+                return z.date;
+            });
+        }));
+
+        let maxValue = (d3.max(this.lineChartData, function (d) {
+            // return d.values;
+            return d3.max(d.values, function (z) {
+                return z.value;
+            });
+        }));
+
         // Setting Axes domain
         // let timeFormat2 = d3.time.format('%Y-%m-%d');
-        this.xScale.domain();
-        this.yScale.domain([0, 241]);
+        this.xScale.domain([minDateValue, maxDataValue]);
+        this.yScale.domain([0, maxValue]);
 
         let pointLine = d3.svg.line()
             .interpolate('basis')
-            .x(d => this.xScale(new Date(+d.date)))
+            .x(d => this.xScale(new Date(+ d.date)))
             .y(d => this.yScale(d.value));
 
 
@@ -150,7 +171,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         //
         // Animate the line
-        for (let i = 0; i < this.lineChartData.length; i++) {
+        for (let i = 0; i < this.lineChartData.length; i ++) {
             let totalLength = path[0][i].getTotalLength();
             console.log('totalLenght is ', totalLength);
             d3.select(path[0][i])
