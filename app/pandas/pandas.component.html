@@ -124,11 +124,31 @@
         <div class="page-content">
             <div class="container-fluid">
 
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="panel panel-default">
+
+                            <div id="graphArea3" class="panel-body">
+                                <i class="fa fa-line-chart fa-2x"></i>
+
+                                <myLineChart [lineChartData]="workspaceTimeData"></myLineChart>
+
+
+                            </div>
+
+
+                        </div>
+
+
+                    </div>
+                </div>
+
                 <div class="row">
                     <div class="col-md-6">
                         <!--{{workspaceTimeData | json}}-->
 
-                        <myLineChart [lineChartData]="workspaceTimeData"></myLineChart>
 
                         <div><strong>Total active users:</strong> {{barData._value}}</div>
                         <div><strong>Time</strong> {{barData.date | date:'medium'}}</div>

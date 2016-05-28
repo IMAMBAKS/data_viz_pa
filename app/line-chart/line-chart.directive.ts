@@ -58,8 +58,8 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         // Create SVG geometry
         this.margin = {top: 60, right: 60, bottom: 60, left: 30};
-        this.width = 1200 - this.margin.right - this.margin.left;
-        this.height = 400 - this.margin.top - this.margin.bottom;
+        this.width = document.getElementById('graphArea').clientWidth - this.margin.right - this.margin.left;
+        this.height = 800 - this.margin.top - this.margin.bottom;
 
         // Scales
         this.xScale = d3.time.scale()
@@ -106,6 +106,10 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
+        // set color scale
+
+        let color = d3.scale.category20();
+
         let minDateValue = (d3.min(this.lineChartData, function (d) {
             // return d.values;
             return d3.min(d.values, function (z) {
@@ -138,6 +142,8 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             .y(d => this.yScale(d.value));
 
 
+        d3.selectAll('.line-graph').style('opacity', '1e-6').remove();
+
         // Define lines
         let lines = this.svg.selectAll('.line-graph')
             .data(this.lineChartData);
@@ -149,10 +155,27 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         let path = lines.append('path')
             .datum(d => d.values)
+            .style('stroke', function (d, i) { // Add dynamically
+                console.log(color(d[i]));
+                // console.log(d.color);
+                return color(i.toString());
+            })
             .attr('d', (d) => {
                     return pointLine(d);
                 }
             );
+
+        // append cicle hhi huhu
+        let circles = this.svg.selectAll('.circle-graph')
+            .data(this.lineChartData);
+
+        circles.enter().append('g').classed('.circle-graph', true);
+
+        circles.append('circle')
+            .data(d => d.values)
+            .attr('cx', d => this.xScale(+d.date))
+            .attr('cy', d => this.yScale(d.value))
+            .attr('r', '3');
 
         // Bind axis data to axis
         let axis = this.svg.selectAll('g.axis')
@@ -173,18 +196,14 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         // Animate the line
         for (let i = 0; i < this.lineChartData.length; i ++) {
             let totalLength = path[0][i].getTotalLength();
-            console.log('totalLenght is ', totalLength);
             d3.select(path[0][i])
                 .attr('stroke-dasharray', totalLength + ' ' + totalLength)
                 .attr('stroke-dashoffset', totalLength)
                 .transition()
-                .duration(10000)
+                .duration(3000)
                 .ease('linear')
                 .attr('stroke-dashoffset', 0);
         }
-
-
-        console.log(this.lineChartData.length);
 
         // path.transition().duration(1).each(function (d) {
         //
