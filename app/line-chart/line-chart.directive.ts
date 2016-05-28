@@ -137,7 +137,6 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         this.yScale.domain([0, maxValue]);
 
         let pointLine = d3.svg.line()
-            .interpolate('basis')
             .x(d => this.xScale(new Date(+ d.date)))
             .y(d => this.yScale(d.value));
 
@@ -151,15 +150,14 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         // Bind the data)
         lines.enter()
             .append('g')
+            .style('stroke', function (d, i) { // Add dynamically
+                // console.log(d.color);
+                return color(i.toString());
+            })
             .attr('class', 'line-graph');
 
         let path = lines.append('path')
             .datum(d => d.values)
-            .style('stroke', function (d, i) { // Add dynamically
-                console.log(color(d[i]));
-                // console.log(d.color);
-                return color(i.toString());
-            })
             .attr('d', (d) => {
                     return pointLine(d);
                 }
@@ -172,12 +170,15 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         circles.enter().append('circle')
             .attr('r', '3');
 
-        circles.each((d) => {
-            // let color1 = d3.select(d.parentElement).style('stoke');
+        let _xScale = this.xScale;
+        let _yScale = this.yScale;
+
+        circles.each(function (d) {
+            let color1 = d3.select(this.parentElement).style('stroke');
             d3.select(this)
-                .attr('cx', this.xScale(+ d.date))
-                .attr('cy', this.yScale(d.value))
-                .attr('fill', 'red');
+                .attr('cx', _xScale(+ d.date))
+                .attr('cy', _yScale(d.value))
+                .attr('fill', color1);
 
 
         });
