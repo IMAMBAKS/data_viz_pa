@@ -178,8 +178,10 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             d3.select(this)
                 .attr('cx', _xScale(+ d.date))
                 .attr('cy', _yScale(d.value))
-                .attr('fill', color1);
-
+                .attr('fill', color1)
+                .on('mouseover', function () {
+                    console.log(this);
+                });
 
         });
 
