@@ -78,7 +78,7 @@ export class BarChartDirective implements OnChanges, AfterContentInit {
         // Create SVG geometry
         this.margin = {top: 60, right: 60, bottom: 60, left: 30};
         this.width = document.getElementById('graphArea').clientWidth - this.margin.right - this.margin.left;
-        this.height = 400 - this.margin.top - this.margin.bottom;
+        this.height = 800 - this.margin.top - this.margin.bottom;
 
         // Scales
         this.xScale = d3.scale.ordinal()

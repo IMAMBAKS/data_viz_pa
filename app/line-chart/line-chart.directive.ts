@@ -11,9 +11,6 @@ declare let d3;
 
 export class LineChartDirective implements OnChanges, AfterContentInit {
 
-
-
-
     // Input and Output variables
     @Input() lineChartData;
 
@@ -83,11 +80,6 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             {axis: this.yAxis, dx: this.margin.left, dy: 0, clazz: 'y'}
         ];
 
-        // // Create line definition
-        // this.line = d3.svg.line()
-        //     .interpolate('cardinal')
-        //     .x(d => this.xScale(d.values.date) + this.xScale.rangeBand() / 2)
-        //     .y(d => this.yScale(d.values.value));
 
     };
 
@@ -105,7 +97,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
-        // define tooltip
+        // Define tooltip
         let gameDiv = d3.select('body')
             .append('div')
             .attr('class', 'tooltip')
@@ -114,7 +106,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         let dateFormat = d3.time.format('%b %d');
 
 
-        // set color scale
+        // Set color scale
         let color = d3.scale.category20();
 
         let minDateValue = (d3.min(this.lineChartData, function (d) {
@@ -139,7 +131,6 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         }));
 
         // Setting Axes domain
-        // let timeFormat2 = d3.time.format('%Y-%m-%d');
         this.xScale.domain([minDateValue, maxDataValue]);
         this.yScale.domain([0, maxValue]);
 
@@ -154,7 +145,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         let lines = this.svg.selectAll('.line-graph')
             .data(this.lineChartData);
 
-        // Bind the data)
+        // Bind the data
         lines.enter()
             .append('g')
             .style('stroke', function (d, i) { // Add dynamically
@@ -170,7 +161,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
                 }
             );
 
-        // append cicle
+        // append circle
         let circles = lines.selectAll('circle')
             .data(d => d.values);
 

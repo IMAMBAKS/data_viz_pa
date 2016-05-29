@@ -1,6 +1,7 @@
 <div id="wrapper">
     <div id="sidebar-wrapper">
         <div class="col-md-12" style="border-left:1px solid rgba(226, 226, 226, 0.11);">
+
             <form #f="ngForm" [ngFormModel]="form" (ngSubmit)="getNewData()" class="form-horizontal">
 
 
@@ -23,7 +24,7 @@
                             />
                             <div>
 
-                                <i class="fa fa-calendar-o fa-2x filtersubmit"></i>
+                                <i class="fa fa-calendar-o fa-1x filtersubmit"></i>
                             </div>
 
 
@@ -53,7 +54,7 @@
 
                             <div>
 
-                                <i class="fa fa-calendar-o fa-2x filtersubmit"></i>
+                                <i class="fa fa-calendar-o filtersubmit"></i>
                             </div>
 
 
@@ -122,10 +123,37 @@
     </div>
     <div id="page-content-wrapper">
         <div class="page-content">
+
             <div class="container-fluid">
 
 
                 <div class="row">
+
+                    <div class="col-md-6">
+                        <h1>Data analytics - Relatics</h1>
+
+                        <p>
+                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Esse impedit provident sed
+                            voluptatum.
+                            Alias aliquam architecto blanditiis, cupiditate debitis deleniti dicta doloremque enim et
+                            eum
+                            explicabo, fuga in laboriosam modi officia porro quisquam quo reiciendis sed unde, velit
+                            veritatis
+                            voluptatum! Atque dignissimos dolores iste maxime nobis pariatur quidem rem! Iusto.
+
+                        </p>
+
+
+                    </div>
+
+                </div>
+
+
+                <div class="row">
+                    <h2>Part one</h2>
+
+                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Architecto atque deserunt excepturi
+                        expedita fuga laboriosam qui quo recusandae soluta ut.</p>
                     <div class="col-md-6">
                         <!--{{workspaceTimeData | json}}-->
 
@@ -135,26 +163,28 @@
 
                     </div>
 
+                    <div class="col-md-12">
+                        <div class="panel panel-default">
 
-                </div>
-
-
-                <div class="panel panel-default">
-
-                    <div id="graphArea" class="panel-body">
-                        <i class="fa fa-bar-chart fa-2x"></i>
+                            <div id="graphArea" class="panel-body">
+                                <i class="fa fa-bar-chart fa-2x"></i>
 
 
-                        <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
-                                    (hovering)="readBarData($event)">
+                                <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
+                                            (hovering)="readBarData($event)">
 
-                        </myBarChart>
+                                </myBarChart>
 
 
+                            </div>
+
+
+                        </div>
                     </div>
 
 
                 </div>
+
 
                 <div class="row">
                     <div class="col-md-12">
