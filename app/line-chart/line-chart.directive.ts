@@ -106,8 +106,16 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
     private redraw(): void {
 
-        // set color scale
+        // define tooltip
+        let gameDiv = d3.select('body')
+            .append('div')
+            .attr('class', 'tooltip')
+            .style('opacity', 0);
 
+        let dateFormat = d3.time.format('%b %d');
+
+
+        // set color scale
         let color = d3.scale.category20();
 
         let minDateValue = (d3.min(this.lineChartData, function (d) {
@@ -163,7 +171,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
                 }
             );
 
-        // append cicle hhi huhu
+        // append cicle
         let circles = lines.selectAll('circle')
             .data(d => d.values);
 
@@ -179,8 +187,20 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
                 .attr('cx', _xScale(+ d.date))
                 .attr('cy', _yScale(d.value))
                 .attr('fill', color1)
-                .on('mouseover', function () {
-                    console.log(this);
+                .on('mouseover', function (e) {
+
+                    gameDiv.style('border', `1px solid ${color1}`).transition()
+                        .duration(200)
+                        .style('opacity', 0.9);
+                    gameDiv.html(`${d.workspace_name} <br> ${dateFormat(d.date)} <br> ${d.value}`)
+                        .style('left', (d3.event.pageX + 10) + 'px')
+                        .style('top', (d3.event.pageY - 40) + 'px');
+
+                })
+                .on('mouseout', function (e) {
+                    gameDiv.transition()
+                        .duration(500)
+                        .style('opacity', 0);
                 });
 
         });
