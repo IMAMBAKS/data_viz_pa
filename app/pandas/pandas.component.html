@@ -126,6 +126,37 @@
 
 
                 <div class="row">
+                    <div class="col-md-6">
+                        <!--{{workspaceTimeData | json}}-->
+
+
+                        <div><strong>Total active users:</strong> {{barData._value}}</div>
+                        <div><strong>Time</strong> {{barData.date | date:'medium'}}</div>
+
+                    </div>
+
+
+                </div>
+
+
+                <div class="panel panel-default">
+
+                    <div id="graphArea" class="panel-body">
+                        <i class="fa fa-bar-chart fa-2x"></i>
+
+
+                        <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
+                                    (hovering)="readBarData($event)">
+
+                        </myBarChart>
+
+
+                    </div>
+
+
+                </div>
+
+                <div class="row">
                     <div class="col-md-12">
 
                         <div class="panel panel-default">
@@ -143,41 +174,6 @@
 
 
                     </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-6">
-                        <!--{{workspaceTimeData | json}}-->
-
-
-                        <div><strong>Total active users:</strong> {{barData._value}}</div>
-                        <div><strong>Time</strong> {{barData.date | date:'medium'}}</div>
-
-                    </div>
-
-
-                </div>
-
-                <div class="row">
-
-
-                </div>
-
-                <div class="panel panel-default">
-
-                    <div id="graphArea" class="panel-body">
-                        <i class="fa fa-bar-chart fa-2x"></i>
-
-
-                        <myBarChart [barChartData]='timeData' [title]="'Active users in time'"
-                                    (hovering)="readBarData($event)">
-
-                        </myBarChart>
-
-
-                    </div>
-
-
                 </div>
 
 

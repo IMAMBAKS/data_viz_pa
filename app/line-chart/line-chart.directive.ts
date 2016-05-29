@@ -28,7 +28,6 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
     private xAxis; // Component X Axis
     private yAxis; // Component Y Axis
     private axisConfig; // Configuration for both axes
-    // private line; // Create line definition
 
     constructor(elementRef: ElementRef) {
         // Select a DOM element
@@ -233,22 +232,31 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
                 .attr('stroke-dashoffset', 0);
         }
 
-        // path.transition().duration(1).each(function (d) {
-        //
-        //     d3.select(this)
-        //         .attr('stroke-dasharray', `${totalLength} ${totalLength}`)
-        //         .attr('stroke-dashoffset', totalLength)
-        //         .transition()
-        //         .delay(300)
-        //         .duration(800)
-        //         .ease('linear')
-        //         .attr('stroke-dashoffset', 0);
-        //
-        //
-        // });
+        // Remove standard text fields
+        this.svg.select('.legendArea').remove();
 
+        let legendArea = this.svg.append('g').classed('legendArea', true);
 
-        console.log('should be redrawn');
+        legendArea.append('text')
+            .attr('x', (this.width / 3))
+            .attr('y', 0 - (this.margin.top / 3))
+            .attr('text-anchor', 'start')
+            .text('Workspace activity in time')
+            .classed('chart-title', true);
+
+        legendArea.append('text')
+            .attr('x', (this.width / 2))
+            .attr('y', this.height + this.margin.bottom / 2)
+            .attr('text-anchor', 'end')
+            .text('time')
+            .style('font-weight', 'bold');
+
+        legendArea.append('text')
+            .attr('text-anchor', 'end')
+            .attr('transform', `translate(${'40'},${this.margin.top})rotate(-90)`)
+            .text('users')
+            .style('font-weight', 'bold');
+
     };
 
 }
