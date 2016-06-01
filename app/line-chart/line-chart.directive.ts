@@ -135,7 +135,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         this.yScale.domain([0, maxValue]);
 
         let pointLine = d3.svg.line()
-            .x(d => this.xScale(new Date(+ d.date)))
+            .x(d => this.xScale(new Date(+d.date)))
             .y(d => this.yScale(d.value));
 
 
@@ -166,7 +166,10 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
             .data(d => d.values);
 
         circles.enter().append('circle')
-            .attr('r', '3');
+            .attr('r', '0').transition()
+            .delay(2000)
+            .duration(1000)
+            .attr('r', 1.5);
 
         let _xScale = this.xScale;
         let _yScale = this.yScale;
@@ -174,7 +177,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         circles.each(function (d) {
             let color1 = d3.select(this.parentElement).style('stroke');
             d3.select(this)
-                .attr('cx', _xScale(+ d.date))
+                .attr('cx', _xScale(+d.date))
                 .attr('cy', _yScale(d.value))
                 .attr('fill', color1)
                 .on('mouseover', function (e) {
@@ -212,7 +215,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         //
         // Animate the line
-        for (let i = 0; i < this.lineChartData.length; i ++) {
+        for (let i = 0; i < this.lineChartData.length; i++) {
             let totalLength = path[0][i].getTotalLength();
             d3.select(path[0][i])
                 .attr('stroke-dasharray', totalLength + ' ' + totalLength)
