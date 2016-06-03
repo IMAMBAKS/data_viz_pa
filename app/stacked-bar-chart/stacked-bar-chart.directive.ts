@@ -48,12 +48,12 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
 
 
         // Create SVG geometry
-        this.margin = {top: 60, right: 60, bottom: 60, left: 30};
+        this.margin = {top: 60, right: 60, bottom: 60, left: 70};
         this.width = document.getElementById('graphArea').clientWidth - this.margin.right - this.margin.left;
         this.height = 800 - this.margin.top - this.margin.bottom;
 
         // Scales
-        this.xScale0 = d3.scale.ordinal().rangeRoundBands([0, this.width], 0.1);
+        this.xScale0 = d3.scale.ordinal().rangeRoundBands([this.margin.left, this.width - this.margin.right], 0.1, .3);
 
         this.xScale1 = d3.scale.ordinal();
 
@@ -96,14 +96,14 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
 
         // Set scales
         let scopeNames = d3.keys(this.stackedChartData[0]).filter(key => key !== 'date');
-
+        let color = d3.scale.category20();
         console.log(scopeNames);
 
         this.xScale0.domain(this.stackedChartData.map(function (d) {
             return new Date(+d.date);
         }));
-        this.xScale1.domain(scopeNames).rangeRoundBands([0, this.xScale0.rangeBand()]);
-        this.yScale.domain([0, d3.max(d3.max(this.stackedChartData, d => +d.intern))]);
+        this.xScale1.domain([0, 1]).rangeRoundBands([0, this.xScale0.rangeBand()]);
+        this.yScale.domain([0, d3.max(this.stackedChartData, d => +d.intern)]);
 
         let state = this.svg.selectAll('.state')
             .data(this.stackedChartData)
@@ -118,9 +118,10 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
             ))
             .enter().append('rect')
             .attr('width', this.xScale1.rangeBand())
-            .attr('height', (d, i) => this.height - this.yScale(+d[i]))
-            // .attr('x', (d, i) => this.xScale1(i))
-            .attr('y', (d, i) => this.yScale(+d[i]));
+            .attr('height', (d, i) => this.yScale(0) - this.yScale(d))
+            .attr('x', (d, i) => this.xScale1(i))
+            .attr('y', (d, i) => this.yScale(+d))
+            .style('fill', (d, i) => color((i * 2).toString()));
 
 
         // Bind axis data to axis
@@ -136,6 +137,27 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
                 .classed(d.clazz, true)
                 .call(d.axis);
         });
+
+        // Create legend
+        let legend = this.svg.selectAll('.legend')
+            .data(scopeNames)
+            .enter()
+            .append('g')
+            .attr('class', 'legend')
+            .attr('transform', (d, i) => (`translate(0, ${i * 20})`));
+
+        legend.append('rect')
+            .attr('x', this.margin.left + 18)
+            .attr('width', 18)
+            .attr('height', 18)
+            .style('fill', (d, i) => color((i * 2).toString()));
+
+        legend.append('text')
+            .attr('x', this.margin.left + 40)
+            .attr('y', 9)
+            .attr('dy', '.35em')
+            .attr('text-anchor', 'left')
+            .text((d, i) => scopeNames[i]);
 
 
     }
