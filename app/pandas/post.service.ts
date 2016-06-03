@@ -23,6 +23,17 @@ export class PostService {
 
     }
 
+    getInternExternUserData(first_date, second_date, freq): any {
+
+        let url: string;
+        url = `http://localhost/intern_extern_users?date1=${first_date}&date2=${second_date}&freq=${freq}`;
+
+        console.log(url);
+        return this._http.get(url)
+            .map(res => res.json());
+
+    }
+
     getActivityData(first_date, second_date, freq): any {
 
         let url: string;

@@ -5,12 +5,13 @@ import {ControlGroup, FormBuilder, Validators} from '@angular/common';
 import {DateValidators} from './dateValidators';
 import {HorizontalBarChartDirective} from '../horizontal-bar-chart/horizontal-bar-chart.directive';
 import {LineChartDirective} from '../line-chart/line-chart.directive';
+import {StackedBarChartDirective} from '../stacked-bar-chart/stacked-bar-chart.directive';
 declare let d3;
 
 @Component({
     selector: 'pandas',
     templateUrl: 'app/pandas/pandas.component.html',
-    directives: [BarChartDirective, HorizontalBarChartDirective, LineChartDirective],
+    directives: [BarChartDirective, HorizontalBarChartDirective, LineChartDirective, StackedBarChartDirective],
     providers: [PostService]
 })
 
@@ -24,6 +25,7 @@ export class PandasComponent {
     barData;
     userData;
     workspaceTimeData;
+    internalExternalUserData;
 
     // Define a form variable
     form: ControlGroup;
@@ -63,6 +65,14 @@ export class PandasComponent {
         let date2 = this.form.value.second_date;
         let frequency = this.choice.freq;
 
+        // Get data internal external users
+
+        this._postService.getInternExternUserData(date1, date2, frequency).subscribe(data => {
+            console.log(data);
+
+            this.internalExternalUserData = data;
+        });
+
         // Get activity data
         this._postService.getActivityData(date1, date2, frequency).subscribe(data => {
 
@@ -75,7 +85,7 @@ export class PandasComponent {
 
                     data_transformed_array.push({
                         _value: data[key].length,
-                        date: new Date(+ key),
+                        date: new Date(+key),
                         names: (data[key])
                     });
                 }
@@ -92,7 +102,7 @@ export class PandasComponent {
 
 
                 data.forEach(function (d) {
-                    d.date = new Date(+ d.date);
+                    d.date = new Date(+d.date);
                 });
 
                 let nested_data = d3.nest()
