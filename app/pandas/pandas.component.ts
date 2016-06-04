@@ -43,7 +43,7 @@ export class PandasComponent {
         });
 
         this.choice = {
-            'freq': 'W'
+            'freq': 'M'
         };
 
         this.barData = '';

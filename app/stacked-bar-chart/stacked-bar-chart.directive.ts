@@ -138,6 +138,24 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
                 .call(d.axis);
         });
 
+        state.selectAll('text')
+            .data((function (d) {
+
+                    let total = d.extern + d.intern;
+                    d.extern1 = (d.extern / total) * 100;
+                    d.intern1 = (d.intern / total) * 100;
+                    return [{'key1': [+d.extern, +d.extern1]},
+                        {'key1': [+d.intern, +d.intern1]}];
+                }
+            ))
+            .enter()
+            .append('text')
+            .attr('x', (d, i) => this.xScale1(i) + this.xScale1.rangeBand() / 2)
+            .attr('y', (d, i) => this.yScale(+d.key1[0]) + 20)
+            .attr('text-anchor', 'middle')
+            .text((d, i) => `${d.key1[1].toString().slice(0, 2)}%`)
+            .style('fill', 'white');
+
         // Create legend
         let legend = this.svg.selectAll('.legend')
             .data(scopeNames)
