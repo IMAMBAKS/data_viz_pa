@@ -135,7 +135,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         this.yScale.domain([0, maxValue]);
 
         let pointLine = d3.svg.line()
-            .x(d => this.xScale(new Date(+d.date)))
+            .x(d => this.xScale(new Date(+ d.date)))
             .y(d => this.yScale(d.value));
 
 
@@ -148,10 +148,12 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         // Bind the data
         lines.enter()
             .append('g')
-            .style('stroke', function (d, i) { // Add dynamically
-                // console.log(d.color);
-                return color(i.toString());
-            })
+            // .style('stroke', function (d, i) { // Add dynamically
+            //     // console.log(d.color);
+            //     return color(i.toString());
+            // })
+            .style('stroke', '#d3d3d3')
+            .style('opacity', '0.5')
             .attr('class', 'line-graph');
 
         let path = lines.append('path')
@@ -174,12 +176,15 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
         let _xScale = this.xScale;
         let _yScale = this.yScale;
 
+
         circles.each(function (d) {
             let color1 = d3.select(this.parentElement).style('stroke');
+            let opacity1 = d3.select(this.parentElement).style('opacity');
             d3.select(this)
-                .attr('cx', _xScale(+d.date))
+                .attr('cx', _xScale(+ d.date))
                 .attr('cy', _yScale(d.value))
                 .attr('fill', color1)
+                .style('opacity', opacity1)
                 .on('mouseover', function (e) {
 
                     gameDiv.style('border', `1px solid ${color1}`).transition()
@@ -215,7 +220,7 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
 
         //
         // Animate the line
-        for (let i = 0; i < this.lineChartData.length; i++) {
+        for (let i = 0; i < this.lineChartData.length; i ++) {
             let totalLength = path[0][i].getTotalLength();
             d3.select(path[0][i])
                 .attr('stroke-dasharray', totalLength + ' ' + totalLength)
@@ -225,6 +230,16 @@ export class LineChartDirective implements OnChanges, AfterContentInit {
                 .ease('linear')
                 .attr('stroke-dashoffset', 0);
         }
+
+        lines.each(function (d, i) {
+            d3.select(this)
+                .on('mouseover', function (e) {
+                    d3.select(this).transition().duration(200).style('stroke', color(i.toString())).style('opacity', 1);
+                })
+                .on('mouseout', function (e) {
+                    d3.select(this).style('stroke', '#d3d3d3').style('opacity', 0.6);
+                });
+        });
 
         // Remove standard text fields
         this.svg.select('.legendArea').remove();
