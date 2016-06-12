@@ -82,7 +82,7 @@ export class StackedBarChartDirective implements OnChanges, AfterContentInit {
 
     private buildSVG(): void {
 
-        // Build the SVG container
+        // Build the SVG container ok
         this.svg = this.host.append('svg')
             .attr('width', this.width + this.margin.right + this.margin.left)
             .attr('height', this.height + this.margin.top + this.margin.bottom)

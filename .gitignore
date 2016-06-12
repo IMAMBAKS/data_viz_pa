@@ -9,3 +9,7 @@ app/**/*.js.map
 test/**/*.js
 test/**/*.js.map
 assets/styles/*.css
+log_relatics.h5
+.idea/workspace.xml
+test.ipynb
+test.py
