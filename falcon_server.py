@@ -1,3 +1,5 @@
+# NOTE THIS FILE SHOULD BE REFACTORED!!!
+
 # sample.py
 import falcon
 import pandas as pd
@@ -7,6 +9,8 @@ from waitress import serve
 cors = CORS(allow_origins_list=['http://localhost:3000/', 'http://localhost:*', 'http://localhost:3000'])
 
 df = pd.read_hdf('log_relatics.h5')
+
+
 
 
 def inter_vs_extern_workspaces(parameter, *args, freq: str = 'W') -> pd.DataFrame:
